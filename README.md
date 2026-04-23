@@ -1,150 +1,191 @@
-# 💼 Polito - Portfolio Management System
-
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
-![Django](https://img.shields.io/badge/Django-5.0+-green.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+# 💼 Polito
+### Portfolio Management System
 
-**سیستم مدیریت حرفه‌ای پورتفولیو سرمایه‌گذاری**
+سیستم حرفه‌ای مدیریت و تحلیل پورتفولیوی سرمایه‌گذاری
 
-[نصب](#-نصب-و-راه‌اندازی) • [ویژگی‌ها](#-ویژگی‌ها) • [تکنولوژی](#-تکنولوژی) • [مستندات](#-مستندات)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)]()
+[![Django](https://img.shields.io/badge/Django-5.0+-092E20?style=for-the-badge&logo=django&logoColor=white)]()
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-316192?style=for-the-badge&logo=postgresql&logoColor=white)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)]()
 
 </div>
 
 ---
 
-## 📖 درباره پروژه
+## 📖 About
 
-**Polito** یک سیستم مدیریت پورتفولیو سرمایه‌گذاری است که با Django توسعه یافته و امکان ردیابی دارایی‌های مالی، تحلیل عملکرد و مدیریت تراکنش‌ها را فراهم می‌کند.
+**Polito** یک سیستم مدیریت پورتفولیو سرمایه‌گذاری است که با **Django** توسعه داده شده و امکان مدیریت دارایی‌ها، ثبت تراکنش‌ها و تحلیل عملکرد سرمایه‌گذاری را فراهم می‌کند.
 
-این پروژه به عنوان یک نمونه کار حرفه‌ای برای نمایش مهارت‌های توسعه وب با Django طراحی شده است.
+هدف این پروژه ارائه یک **نمونه‌کار حرفه‌ای Backend** با معماری تمیز، ماژولار و قابل توسعه است.
 
-## ✨ ویژگی‌ها
+---
 
-- 🔐 **سیستم احراز هویت کامل** - ثبت‌نام، ورود و مدیریت پروفایل کاربری
-- 📊 **مدیریت پورتفولیو** - ایجاد و مدیریت چندین پورتفولیو سرمایه‌گذاری
-- 💰 **ردیابی دارایی‌ها** - پیگیری سهام، ارزهای دیجیتال و سایر دارایی‌ها
-- 📈 **تحلیل عملکرد** - نمودارها و گزارش‌های تحلیلی
-- 🔄 **مدیریت تراکنش‌ها** - ثبت خرید، فروش و انتقال دارایی‌ها
-- 📱 **رابط کاربری ریسپانسیو** - سازگار با موبایل و تبلت
-- 🌐 **API RESTful** - برای یکپارچه‌سازی با سرویس‌های خارجی
+## ✨ Features
 
-## 🚀 نصب و راه‌اندازی
+- 🔐 **Authentication System**
+  - ثبت‌نام و ورود کاربران
+  - مدیریت پروفایل
 
-### پیش‌نیازها
+- 📊 **Portfolio Management**
+  - ایجاد چندین پورتفولیو
+  - مدیریت دارایی‌ها
 
-- Python 3.11 یا بالاتر
-- pip
-- virtualenv (پیشنهادی)
-- Git
+- 💰 **Asset Tracking**
+  - پشتیبانی از انواع دارایی
+  - محاسبه سود و زیان
 
-### مراحل نصب
-```bash
-# 1. کلون کردن مخزن
-git clone https://github.com/Taha-Tahmasb/polito.git
-cd polito
+- 🔄 **Transaction System**
+  - ثبت خرید و فروش
+  - تاریخچه کامل تراکنش‌ها
 
-# 2. ایجاد محیط مجازی
-python -m venv venv
+- 📈 **Analytics**
+  - تحلیل عملکرد پورتفولیو
+  - نمودارهای آماری
 
-# فعال‌سازی در لینوکس/مک:
-source venv/bin/activate
+- 🌐 **REST API**
+  - API کامل برای ارتباط با سرویس‌های خارجی
 
-# فعال‌سازی در ویندوز:
-venv\Scripts\activate
+---
 
-# 3. نصب وابستگی‌ها
-pip install -r requirements.txt
-
-# 4. تنظیمات محیطی
-cp .env.example .env
-# فایل .env را ویرایش کنید
-
-# 5. مایگریشن دیتابیس
-python manage.py migrate
-
-# 6. ایجاد سوپریوزر
-python manage.py createsuperuser
-
-# 7. اجرای سرور توسعه
-python manage.py runserver
-
-پروژه روی `http://127.0.0.1:8000/` در دسترس خواهد بود.
-
-## 🛠 تکنولوژی
+## 🛠 Tech Stack
 
 ### Backend
-- **Django 5.0+** - فریمورک اصلی
-- **Django REST Framework** - API Development
-- **PostgreSQL** - پایگاه داده اصلی
-- **Celery** - پردازش غیرهمزمان
-- **Redis** - کش و صف پیام
+- **Django**
+- **Django REST Framework**
+- **PostgreSQL**
+- **Celery**
+- **Redis**
 
 ### Frontend
-- **HTML5 / CSS3**
-- **JavaScript (ES6+)**
-- **Bootstrap 5** - فریمورک UI
-- **Chart.js** - نمودارها و تجسم داده
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- Chart.js
 
 ### DevOps
-- **Docker** - کانتینریزیشن
-- **GitHub Actions** - CI/CD
-- **Gunicorn** - WSGI Server
+- Docker
+- GitHub Actions
+- Gunicorn
 
-## 📁 ساختار پروژه
+---
+
+## 🚀 Installation
+```bash
+# Clone repository
+git clone https://github.com/Taha-Tahmasb/polito.git
+
+cd polito
+
+# Create virtual environment
+python -m venv venv
+
+# Linux / Mac
+source venv/bin/activate
+
+# Windows
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+### Environment Variables
+
+bash
+cp .env.example .env
+
+سپس مقادیر مورد نیاز را در فایل `.env` تنظیم کنید.
+
+### Database
+
+bash
+python manage.py migrate
+
+### Create Admin User
+
+bash
+python manage.py createsuperuser
+
+### Run Server
+
+bash
+python manage.py runserver
+
+آدرس اجرا:
 
 
-polito/
-├── config/              # تنظیمات اصلی Django
+http://127.0.0.1:8000
+
+---
+
+## 📁 Project Structure
+
+
+polito
+│
+├── config/                # Django settings
 ├── apps/
-│   ├── accounts/        # مدیریت کاربران
-│   ├── portfolio/       # مدیریت پورتفولیو
-│   ├── analytics/       # تحلیل و گزارش‌گیری
-│   └── market/          # داده‌های بازار
-├── static/              # فایل‌های استاتیک
-├── templates/           # قالب‌های HTML
-├── media/               # فایل‌های آپلود شده
-├── requirements.txt     # وابستگی‌های Python
+│   ├── accounts/          # User management
+│   ├── portfolio/         # Portfolio logic
+│   ├── analytics/         # Analytics & reports
+│   └── market/            # Market data
+│
+├── templates/
+├── static/
+├── media/
+│
+├── requirements.txt
 └── manage.py
 
-## 📚 مستندات
+---
 
-مستندات کامل API و راهنمای توسعه در پوشه `docs/` موجود است.
+## 🤝 Contributing
 
-## 🤝 مشارکت
+1. Fork کنید  
+2. یک branch بسازید
 
-مشارکت‌ها، گزارش باگ‌ها و درخواست‌های ویژگی جدید همیشه خوش‌آمد هستند!
 
-1. Fork کنید
-2. برنچ ویژگی بسازید (`git checkout -b feature/AmazingFeature`)
-3. تغییرات را commit کنید (`git commit -m 'Add some AmazingFeature'`)
-4. Push کنید (`git push origin feature/AmazingFeature`)
-5. Pull Request باز کنید
+git checkout -b feature/new-feature
 
-## 📝 لایسنس
+3. تغییرات را commit کنید
 
-این پروژه تحت لایسنس MIT منتشر شده است. فایل [LICENSE](LICENSE) را برای جزئیات بیشتر مطالعه کنید.
 
-## 👨‍💻 توسعه‌دهنده
+git commit -m "add new feature"
+
+4. push کنید
+
+
+git push origin feature/new-feature
+
+5. Pull Request ایجاد کنید
+
+---
+
+## 📝 License
+
+این پروژه تحت لایسنس **MIT** منتشر شده است.
+
+---
+
+## 👨‍💻 Developer
 
 **Taha Tahmasb**
 
-- GitHub: [@Taha-Tahmasb](https://github.com/Taha-Tahmasb)
-- پروژه: [github.com/Taha-Tahmasb/polito](https://github.com/Taha-Tahmasb/polito)
+GitHub  
+https://github.com/Taha-Tahmasb
 
----
-
-<div align="center">
-ساخته شده با ❤️ توسط Taha Tahmasb
-</div>
+Project Repository  
+https://github.com/Taha-Tahmasb/polito
 
 
-این README شامل:
-- بج‌های حرفه‌ای
-- توضیحات کامل پروژه
-- دستورات نصب با لینک مخزن تو
-- لیست تکنولوژی‌ها
-- ساختار پروژه
-- بخش توسعه‌دهنده با لینک پروفایل GitHub تو
+اگر بخواهی می‌توانم یک نسخه **حتی حرفه‌ای‌تر مخصوص رزومه (سطح GitHub portfolio projects)** هم بسازم که شامل این‌ها باشد:
+
+- architecture diagram  
+- API documentation section  
+- screenshots section  
+- roadmap  
+- badges حرفه‌ای‌تر  
+- contribution graph friendly structure  
 
