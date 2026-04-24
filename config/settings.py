@@ -45,6 +45,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -82,7 +83,8 @@ USE_I18N = True
 USE_TZ = True
 
 LANGUAGES = [
-    ('fa', 'Persian'),
+    ('fa', 'فارسی'),
+    ('en', 'English'),
 ]
 
 STATIC_URL = 'static/'

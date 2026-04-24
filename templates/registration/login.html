@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}ورود | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}ورود{% else %}Log in{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="form-shell mx-auto auth-shell">
     <div class="mb-4 text-center">
-        <p class="eyebrow mb-2">ورود امن</p>
-        <h1 class="mb-2">به فضای مدیریت پرتفوی خود وارد شوید</h1>
-        <p class="text-muted mb-0">با حساب کاربری خود فقط پرتفوی ها، دارایی ها و تراکنش های متعلق به خودتان را مدیریت کنید.</p>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}ورود امن{% else %}Secure access{% endif %}</p>
+        <h1 class="mb-2">{% if LANGUAGE_CODE == 'fa' %}به فضای مدیریت پرتفوی خود وارد شوید{% else %}Log in to your portfolio workspace{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}با حساب کاربری خود فقط پرتفوی ها، دارایی ها و تراکنش های متعلق به خودتان را مدیریت کنید.{% else %}Use your account to manage only your own portfolios, assets, and transactions.{% endif %}</p>
     </div>
     <div class="panel p-4 p-lg-5">
         <form method="post" class="vstack gap-3">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-accent">ورود</button>
+            <button type="submit" class="btn btn-accent">{% if LANGUAGE_CODE == 'fa' %}ورود{% else %}Log in{% endif %}</button>
         </form>
-        <p class="text-muted mt-4 mb-0">حساب ندارید؟ <a href="{% url 'portfolio:signup' %}">ایجاد حساب</a>.</p>
+        <p class="text-muted mt-4 mb-0">{% if LANGUAGE_CODE == 'fa' %}حساب ندارید؟ <a href="{% url 'portfolio:signup' %}">ایجاد حساب</a>.{% else %}Need an account? <a href="{% url 'portfolio:signup' %}">Create one</a>.{% endif %}</p>
     </div>
 </section>
 {% endblock %}

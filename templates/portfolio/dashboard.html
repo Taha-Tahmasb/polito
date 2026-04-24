@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}داشبورد | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}داشبورد{% else %}Dashboard{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="hero-card p-4 p-lg-5 mb-4">
     <div class="row align-items-center g-4">
         <div class="col-lg-7">
-            <p class="eyebrow mb-2">نمای کلی پرتفوی</p>
-            <h1 class="display-5 mb-3">{{ request.user.username }}، دوباره خوش آمدید. دارایی ها و عملکرد خود را یکجا مدیریت کنید.</h1>
-            <p class="lead text-muted mb-4">موقعیت ها را دنبال کنید، ترکیب دارایی ها را ببینید و همه تصمیم های سرمایه گذاری را در فضای فارسی و شخصی خود ثبت کنید.</p>
+            <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}نمای کلی پرتفوی{% else %}Portfolio overview{% endif %}</p>
+            <h1 class="display-5 mb-3">{% if LANGUAGE_CODE == 'fa' %}{{ request.user.username }}، دوباره خوش آمدید. دارایی ها و عملکرد خود را یکجا مدیریت کنید.{% else %}Welcome back, {{ request.user.username }}. Manage your assets and performance in one place.{% endif %}</h1>
+            <p class="lead text-muted mb-4">{% if LANGUAGE_CODE == 'fa' %}موقعیت ها را دنبال کنید، ترکیب دارایی ها را ببینید و همه تصمیم های سرمایه گذاری را در فضای شخصی خود ثبت کنید.{% else %}Track positions, understand allocation, and keep every portfolio decision visible inside your own workspace.{% endif %}</p>
             <div class="d-flex flex-wrap gap-3">
-                <a class="btn btn-accent btn-lg" href="{% url 'portfolio:create' %}">ایجاد پرتفوی</a>
-                <a class="btn btn-outline-dark btn-lg" href="{% url 'portfolio:transaction-create' %}">ثبت تراکنش</a>
+                <a class="btn btn-accent btn-lg" href="{% url 'portfolio:create' %}">{% if LANGUAGE_CODE == 'fa' %}ایجاد پرتفوی{% else %}Create portfolio{% endif %}</a>
+                <a class="btn btn-outline-dark btn-lg" href="{% url 'portfolio:transaction-create' %}">{% if LANGUAGE_CODE == 'fa' %}ثبت تراکنش{% else %}Log transaction{% endif %}</a>
             </div>
         </div>
         <div class="col-lg-5">

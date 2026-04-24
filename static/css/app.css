@@ -16,10 +16,18 @@ body {
     radial-gradient(circle at top right, rgba(194, 65, 12, 0.16), transparent 25%),
     linear-gradient(180deg, #f9f5ee 0%, var(--bg) 100%);
   color: var(--ink);
-  direction: rtl;
   font-family: Tahoma, "Segoe UI", sans-serif;
   min-height: 100vh;
+}
+
+html[dir="rtl"] body {
+  direction: rtl;
   text-align: right;
+}
+
+html[dir="ltr"] body {
+  direction: ltr;
+  text-align: left;
 }
 
 h1, h2, h3, h4, .navbar-brand {
@@ -45,6 +53,15 @@ h1, h2, h3, h4, .navbar-brand {
 .form-label,
 form p label {
   text-align: right;
+}
+
+html[dir="ltr"] .table,
+html[dir="ltr"] .form-label,
+html[dir="ltr"] form p label,
+html[dir="ltr"] form input,
+html[dir="ltr"] form select,
+html[dir="ltr"] form textarea {
+  text-align: left;
 }
 
 .btn-accent {

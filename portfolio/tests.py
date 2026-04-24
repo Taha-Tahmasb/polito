@@ -143,6 +143,13 @@ class PortfolioViewsTests(TestCase):
         response = self.client.get(reverse('portfolio:dashboard'))
         self.assertRedirects(response, '/login/?next=/dashboard/')
 
+    def test_language_switch_can_render_english_dashboard(self):
+        self.client.post('/i18n/setlang/', {'language': 'en', 'next': reverse('portfolio:dashboard')})
+        self.client.login(username='jamie', password='secret123')
+        response = self.client.get(reverse('portfolio:dashboard'))
+        self.assertContains(response, 'Portfolio overview')
+        self.assertContains(response, 'Dashboard')
+
     def test_dashboard_page_renders_for_authenticated_user(self):
         self.client.login(username='jamie', password='secret123')
         response = self.client.get(reverse('portfolio:dashboard'))

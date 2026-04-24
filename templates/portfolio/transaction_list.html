@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}فعالیت ها | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}فعالیت ها{% else %}Activity{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <p class="eyebrow mb-2">گزارش فعالیت</p>
-        <h1 class="mb-1">تاریخچه تراکنش ها</h1>
-        <p class="text-muted mb-0">همه واریزها، خریدها، فروش ها و سودهای نقدی پرتفوی های خود را مرور کنید.</p>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}گزارش فعالیت{% else %}Activity log{% endif %}</p>
+        <h1 class="mb-1">{% if LANGUAGE_CODE == 'fa' %}تاریخچه تراکنش ها{% else %}Transaction history{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}همه واریزها، خریدها، فروش ها و سودهای نقدی پرتفوی های خود را مرور کنید.{% else %}Review every deposit, trade, and dividend across your portfolios.{% endif %}</p>
     </div>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-dark" href="{% url 'portfolio:transactions-export' %}?portfolio={{ selected_portfolio }}&type={{ selected_type }}">خروجی CSV</a>

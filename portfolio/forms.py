@@ -3,9 +3,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils.translation import get_language
 
 from .models import Asset, Portfolio, Transaction
 from .services import validate_transaction_effect
+
+
+def tr(fa_text, en_text):
+    language = (get_language() or 'fa').split('-')[0]
+    return fa_text if language == 'fa' else en_text
 
 
 class DateInput(forms.DateInput):
@@ -21,16 +27,24 @@ class SignUpForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = 'نام کاربری'
-        self.fields['username'].help_text = 'فقط از حروف، اعداد و @/./+/-/_ استفاده کنید.'
-        self.fields['email'].label = 'ایمیل'
-        self.fields['password1'].label = 'رمز عبور'
-        self.fields['password2'].label = 'تکرار رمز عبور'
+        self.fields['username'].label = tr('نام کاربری', 'Username')
+        self.fields['username'].help_text = tr(
+            'فقط از حروف، اعداد و @/./+/-/_ استفاده کنید.',
+            'Use letters, numbers, and @/./+/-/_ only.',
+        )
+        self.fields['email'].label = tr('ایمیل', 'Email')
+        self.fields['password1'].label = tr('رمز عبور', 'Password')
+        self.fields['password2'].label = tr('تکرار رمز عبور', 'Password confirmation')
 
 
 class PersianAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label='نام کاربری')
-    password = forms.CharField(label='رمز عبور', strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}))
+    username = forms.CharField()
+    password = forms.CharField(strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}))
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request, *args, **kwargs)
+        self.fields['username'].label = tr('نام کاربری', 'Username')
+        self.fields['password'].label = tr('رمز عبور', 'Password')
 
 
 class PortfolioForm(forms.ModelForm):
@@ -41,6 +55,13 @@ class PortfolioForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'مثلا استراتژی رشد، درآمدی یا پس انداز بلندمدت'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['description'].widget.attrs['placeholder'] = tr(
+            'مثلا استراتژی رشد، درآمدی یا پس انداز بلندمدت',
+            'For example: growth strategy, income sleeve, or long-term savings',
+        )
+
 
 class AssetForm(forms.ModelForm):
     class Meta:
@@ -49,9 +70,12 @@ class AssetForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['symbol'].help_text = 'نماد بورسی یا شناسه دارایی را وارد کنید.'
         if user is not None:
             self.fields['portfolio'].queryset = Portfolio.objects.filter(owner=user)
+        self.fields['symbol'].help_text = tr(
+            'نماد بورسی یا شناسه دارایی را وارد کنید.',
+            'Enter the ticker symbol or asset identifier.',
+        )
 
 
 class TransactionForm(forms.ModelForm):
@@ -65,6 +89,7 @@ class TransactionForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['notes'].widget.attrs['placeholder'] = tr('یادداشت اختیاری', 'Optional note')
         if user is not None:
             owned_portfolios = Portfolio.objects.filter(owner=user)
             self.fields['portfolio'].queryset = owned_portfolios

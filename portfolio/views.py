@@ -9,11 +9,17 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import DecimalField, ExpressionWrapper, F, Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.translation import get_language
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
 from .forms import AssetForm, PersianAuthenticationForm, PortfolioForm, SignUpForm, TransactionForm
 from .models import Asset, Portfolio, Transaction
 from .services import apply_transaction
+
+
+def tr(fa_text, en_text):
+    language = (get_language() or 'fa').split('-')[0]
+    return fa_text if language == 'fa' else en_text
 
 
 class SignUpView(CreateView):
@@ -29,7 +35,10 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         login(self.request, self.object)
-        messages.success(self.request, 'حساب کاربری شما با موفقیت ساخته شد. خوش آمدید.')
+        messages.success(
+            self.request,
+            tr('حساب کاربری شما با موفقیت ساخته شد. خوش آمدید.', 'Your account was created successfully. Welcome.'),
+        )
         return response
 
 
@@ -152,7 +161,11 @@ class PortfolioHoldingsExportView(OwnerQuerysetMixin, DetailView):
         response['Content-Disposition'] = f'attachment; filename="portfolio-{portfolio.pk}-holdings.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(['نماد', 'نام', 'نوع', 'تعداد', 'میانگین قیمت خرید', 'قیمت فعلی', 'ارزش بازار', 'سود و زیان'])
+        writer.writerow(
+            ['نماد', 'نام', 'نوع', 'تعداد', 'میانگین قیمت خرید', 'قیمت فعلی', 'ارزش بازار', 'سود و زیان']
+            if (get_language() or 'fa').split('-')[0] == 'fa'
+            else ['symbol', 'name', 'type', 'quantity', 'average_cost', 'current_price', 'market_value', 'pnl']
+        )
         for asset in portfolio.assets.all():
             writer.writerow(
                 [
@@ -177,12 +190,12 @@ class PortfolioCreateView(OwnerQuerysetMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
-        messages.success(self.request, 'پرتفوی با موفقیت ایجاد شد.')
+        messages.success(self.request, tr('پرتفوی با موفقیت ایجاد شد.', 'Portfolio created successfully.'))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_title'] = 'ایجاد پرتفوی'
+        context['form_title'] = tr('ایجاد پرتفوی', 'Create portfolio')
         return context
 
 
@@ -196,12 +209,12 @@ class PortfolioUpdateView(OwnerQuerysetMixin, UpdateView):
         return self.get_portfolios()
 
     def form_valid(self, form):
-        messages.success(self.request, 'پرتفوی با موفقیت به روز شد.')
+        messages.success(self.request, tr('پرتفوی با موفقیت به روز شد.', 'Portfolio updated successfully.'))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_title'] = 'ویرایش پرتفوی'
+        context['form_title'] = tr('ویرایش پرتفوی', 'Edit portfolio')
         return context
 
 
@@ -214,7 +227,7 @@ class PortfolioDeleteView(OwnerQuerysetMixin, DeleteView):
         return self.get_portfolios()
 
     def form_valid(self, form):
-        messages.success(self.request, 'پرتفوی با موفقیت حذف شد.')
+        messages.success(self.request, tr('پرتفوی با موفقیت حذف شد.', 'Portfolio deleted successfully.'))
         return super().form_valid(form)
 
 
@@ -237,12 +250,12 @@ class AssetCreateView(OwnerQuerysetMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        messages.success(self.request, 'دارایی با موفقیت اضافه شد.')
+        messages.success(self.request, tr('دارایی با موفقیت اضافه شد.', 'Asset added successfully.'))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_title'] = 'افزودن دارایی'
+        context['form_title'] = tr('افزودن دارایی', 'Add asset')
         return context
 
 
@@ -263,12 +276,12 @@ class AssetUpdateView(OwnerQuerysetMixin, UpdateView):
         return reverse_lazy('portfolio:detail', kwargs={'pk': self.object.portfolio_id})
 
     def form_valid(self, form):
-        messages.success(self.request, 'دارایی با موفقیت به روز شد.')
+        messages.success(self.request, tr('دارایی با موفقیت به روز شد.', 'Asset updated successfully.'))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_title'] = 'ویرایش دارایی'
+        context['form_title'] = tr('ویرایش دارایی', 'Update asset')
         return context
 
 
@@ -327,14 +340,18 @@ class TransactionExportView(OwnerQuerysetMixin, TemplateView):
         response['Content-Disposition'] = 'attachment; filename="polito-transactions.csv"'
 
         writer = csv.writer(response)
-        writer.writerow(['تاریخ', 'نوع', 'پرتفوی', 'دارایی', 'مبلغ', 'یادداشت'])
+        writer.writerow(
+            ['تاریخ', 'نوع', 'پرتفوی', 'دارایی', 'مبلغ', 'یادداشت']
+            if (get_language() or 'fa').split('-')[0] == 'fa'
+            else ['date', 'type', 'portfolio', 'asset', 'amount', 'notes']
+        )
         for transaction in transactions:
             writer.writerow(
                 [
                     transaction.executed_at.isoformat(),
                     transaction.get_transaction_type_display(),
                     transaction.portfolio.name,
-                    transaction.asset.symbol if transaction.asset else 'گردش نقدی',
+                    transaction.asset.symbol if transaction.asset else tr('گردش نقدی', 'Cash movement'),
                     transaction.total_amount,
                     transaction.notes,
                 ]
@@ -363,12 +380,12 @@ class TransactionCreateView(OwnerQuerysetMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         apply_transaction(self.object)
-        messages.success(self.request, 'تراکنش با موفقیت ثبت شد.')
+        messages.success(self.request, tr('تراکنش با موفقیت ثبت شد.', 'Transaction logged successfully.'))
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_title'] = 'ثبت تراکنش'
+        context['form_title'] = tr('ثبت تراکنش', 'Log transaction')
         return context
 
 

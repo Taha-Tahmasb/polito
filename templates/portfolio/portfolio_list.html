@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}پرتفوی ها | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}پرتفوی ها{% else %}Portfolios{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <p class="eyebrow mb-2">دفتر پرتفوی</p>
-        <h1 class="mb-1">همه پرتفوی ها</h1>
-        <p class="text-muted mb-0">همه استراتژی ها، موجودی ها و اهداف متصل به حساب خود را یکجا ببینید.</p>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}دفتر پرتفوی{% else %}Portfolio book{% endif %}</p>
+        <h1 class="mb-1">{% if LANGUAGE_CODE == 'fa' %}همه پرتفوی ها{% else %}All portfolios{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}همه استراتژی ها، موجودی ها و اهداف متصل به حساب خود را یکجا ببینید.{% else %}Review every strategy, balance, and target tied to your account.{% endif %}</p>
     </div>
-    <a class="btn btn-accent" href="{% url 'portfolio:create' %}">ایجاد پرتفوی</a>
+    <a class="btn btn-accent" href="{% url 'portfolio:create' %}">{% if LANGUAGE_CODE == 'fa' %}ایجاد پرتفوی{% else %}Create portfolio{% endif %}</a>
 </section>
 
 <div class="row g-4">

@@ -3,31 +3,37 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import transaction as db_transaction
 from django.utils import timezone
+from django.utils.translation import get_language
 
 from .models import Transaction
+
+
+def tr(fa_text, en_text):
+    language = (get_language() or 'fa').split('-')[0]
+    return fa_text if language == 'fa' else en_text
 
 
 def validate_transaction_effect(portfolio, asset, transaction_type, quantity, price_per_unit):
     total_amount = quantity * price_per_unit
 
     if transaction_type == Transaction.TransactionType.DEPOSIT and asset is not None:
-        raise ValidationError('تراکنش واریز نباید به دارایی متصل باشد.')
+        raise ValidationError(tr('تراکنش واریز نباید به دارایی متصل باشد.', 'Deposits should not be linked to an asset.'))
 
     if transaction_type in {
         Transaction.TransactionType.BUY,
         Transaction.TransactionType.SELL,
         Transaction.TransactionType.DIVIDEND,
     } and asset is None:
-        raise ValidationError('برای خرید، فروش و سود نقدی باید یک دارایی انتخاب شود.')
+        raise ValidationError(tr('برای خرید، فروش و سود نقدی باید یک دارایی انتخاب شود.', 'Select an asset for buys, sells, and dividends.'))
 
     if asset is not None and asset.portfolio_id != portfolio.id:
-        raise ValidationError('دارایی انتخاب شده متعلق به این پرتفوی نیست.')
+        raise ValidationError(tr('دارایی انتخاب شده متعلق به این پرتفوی نیست.', 'The selected asset does not belong to this portfolio.'))
 
     if transaction_type == Transaction.TransactionType.BUY and portfolio.cash_balance < total_amount:
-        raise ValidationError('موجودی نقدی این پرتفوی برای این خرید کافی نیست.')
+        raise ValidationError(tr('موجودی نقدی این پرتفوی برای این خرید کافی نیست.', 'This portfolio does not have enough cash for that purchase.'))
 
     if transaction_type == Transaction.TransactionType.SELL and asset.quantity < quantity:
-        raise ValidationError('نمی توانید بیشتر از تعداد دارایی موجود، فروش ثبت کنید.')
+        raise ValidationError(tr('نمی توانید بیشتر از تعداد دارایی موجود، فروش ثبت کنید.', 'You cannot sell more units than you currently hold.'))
 
 
 @db_transaction.atomic
