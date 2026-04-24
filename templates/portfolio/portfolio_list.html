@@ -30,6 +30,10 @@
                 <div><dt>Cash balance</dt><dd>${{ portfolio.cash_balance|floatformat:2|intcomma }}</dd></div>
                 <div><dt>Target return</dt><dd>{{ portfolio.target_return }}%</dd></div>
             </dl>
+            <div class="d-flex gap-2 pt-3">
+                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:detail' portfolio.pk %}">Open</a>
+                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:edit' portfolio.pk %}">Edit</a>
+            </div>
         </article>
     </div>
     {% empty %}
