@@ -135,6 +135,7 @@ Example section after recording a demo:
 | Charts | Chart.js |
 | Authentication | Django authentication system |
 | Testing | Django test framework |
+| Config | Environment-driven Django settings |
 
 ## Quick Start
 
@@ -171,6 +172,22 @@ Windows:
 pip install -r requirements.txt
 ```
 
+### 4.5) Configure environment variables
+
+Copy the example file and adjust values for your machine or deploy target:
+
+```bash
+cp .env.example .env
+```
+
+Polito reads its Django settings from environment variables such as:
+
+- `DJANGO_SECRET_KEY`
+- `DJANGO_DEBUG`
+- `DJANGO_ALLOWED_HOSTS`
+- `DJANGO_CSRF_TRUSTED_ORIGINS`
+- `DJANGO_SECURE_SSL_REDIRECT`
+
 ### 5) Apply migrations
 
 ```bash
@@ -193,6 +210,21 @@ Then open:
 
 ```text
 http://127.0.0.1:8000/
+```
+
+### Optional: load demo data
+
+If you want a ready-to-browse workspace with sample portfolios and transactions:
+
+```bash
+python manage.py seed_demo_data
+```
+
+Default demo login:
+
+```text
+username: demo
+password: DemoPass123!
 ```
 
 ## Routes
