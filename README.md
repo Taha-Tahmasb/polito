@@ -62,6 +62,7 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Portfolio Management</h3>
       <ul>
         <li>Create multiple portfolios</li>
+        <li>Edit and remove portfolios safely</li>
         <li>Track cash balance and target return</li>
         <li>View portfolio-level summaries</li>
       </ul>
@@ -72,6 +73,7 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Asset Tracking</h3>
       <ul>
         <li>Add stocks, ETFs, crypto, bonds, and cash</li>
+        <li>Update live positions as holdings change</li>
         <li>Track quantity, average cost, and market price</li>
         <li>Compute value and unrealized P/L</li>
       </ul>
@@ -80,8 +82,9 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Transactions</h3>
       <ul>
         <li>Record buys, sells, dividends, and deposits</li>
+        <li>Automatically update holdings and cash balances</li>
         <li>Link activity to portfolios and assets</li>
-        <li>Review recent activity from the dashboard</li>
+        <li>Review recent activity from the dashboard and full history page</li>
       </ul>
     </td>
   </tr>
@@ -200,10 +203,14 @@ http://127.0.0.1:8000/
 | `/signup/` | Create an account |
 | `/login/` | Sign in |
 | `/dashboard/` | Main dashboard |
+| `/transactions/` | Full transaction history |
 | `/portfolios/` | Portfolio list |
 | `/portfolios/create/` | Create a portfolio |
 | `/portfolios/<id>/` | Portfolio detail |
+| `/portfolios/<id>/edit/` | Update a portfolio |
+| `/portfolios/<id>/delete/` | Delete a portfolio |
 | `/assets/create/` | Add an asset |
+| `/assets/<id>/edit/` | Update an asset position |
 | `/transactions/create/` | Log a transaction |
 | `/admin/` | Django admin |
 
@@ -286,9 +293,11 @@ Current automated tests cover:
 
 - portfolio value calculations
 - asset profit calculations
+- transaction application to cash and holdings
+- transaction validation for oversells
 - authentication protection on dashboard views
 - ownership isolation between users
-- authenticated portfolio creation flow
+- authenticated portfolio creation, editing, and activity views
 
 ## GitHub Presentation Tips
 
@@ -301,7 +310,6 @@ To make this repository look even better on GitHub, add:
 
 ## Roadmap
 
-- edit and delete flows for all models
 - REST API with Django REST Framework
 - historical performance snapshots
 - real market price integration
