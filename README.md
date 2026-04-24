@@ -44,6 +44,7 @@ This makes it a strong GitHub project because it demonstrates:
 - relational data modeling
 - analytics and chart rendering
 - CRUD-style workflows
+- exports, onboarding helpers, and deploy-minded configuration
 - test coverage and project structure
 
 ## Features
@@ -85,6 +86,7 @@ This makes it a strong GitHub project because it demonstrates:
         <li>Automatically update holdings and cash balances</li>
         <li>Link activity to portfolios and assets</li>
         <li>Review recent activity from the dashboard and full history page</li>
+        <li>Filter and export transaction history to CSV</li>
       </ul>
     </td>
   </tr>
@@ -235,7 +237,8 @@ password: DemoPass123!
 | `/signup/` | Create an account |
 | `/login/` | Sign in |
 | `/dashboard/` | Main dashboard |
-| `/transactions/` | Full transaction history |
+| `/transactions/` | Full transaction history with filters |
+| `/transactions/export/` | Export filtered transaction history as CSV |
 | `/portfolios/` | Portfolio list |
 | `/portfolios/create/` | Create a portfolio |
 | `/portfolios/<id>/` | Portfolio detail |
@@ -330,6 +333,8 @@ Current automated tests cover:
 - authentication protection on dashboard views
 - ownership isolation between users
 - authenticated portfolio creation, editing, and activity views
+- transaction filtering and CSV exports
+- dashboard insights for goal progress and key holdings
 
 ## GitHub Presentation Tips
 
