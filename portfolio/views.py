@@ -126,6 +126,7 @@ class DashboardView(OwnerQuerysetMixin, TemplateView):
                 'goal_progress_rows': sorted(portfolio_rows, key=lambda row: row['target_gap'], reverse=True),
                 'top_assets': top_assets,
                 'watchlist_assets': watchlist_assets,
+                'cash_movement_label': tr('گردش نقدی', 'Cash movement'),
             }
         )
         return context
@@ -139,6 +140,11 @@ class PortfolioListView(OwnerQuerysetMixin, ListView):
     def get_queryset(self):
         return self.get_portfolios().prefetch_related('assets')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['default_description'] = tr('هنوز توضیحی ثبت نشده است.', 'No description added yet.')
+        return context
+
 
 class PortfolioDetailView(OwnerQuerysetMixin, DetailView):
     model = Portfolio
@@ -147,6 +153,11 @@ class PortfolioDetailView(OwnerQuerysetMixin, DetailView):
 
     def get_queryset(self):
         return self.get_portfolios().prefetch_related('assets', 'transactions__asset')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cash_movement_label'] = tr('گردش نقدی', 'Cash movement')
+        return context
 
 
 class PortfolioHoldingsExportView(OwnerQuerysetMixin, DetailView):
@@ -316,6 +327,7 @@ class TransactionListView(OwnerQuerysetMixin, ListView):
                 'selected_portfolio': self.request.GET.get('portfolio', ''),
                 'selected_type': self.request.GET.get('type', ''),
                 'filtered_total': sum((item.total_amount for item in filtered_transactions), Decimal('0')),
+                'cash_movement_label': tr('گردش نقدی', 'Cash movement'),
             }
         )
         return context

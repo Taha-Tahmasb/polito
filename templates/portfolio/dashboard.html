@@ -18,19 +18,19 @@
         <div class="col-lg-5">
             <div class="stat-grid">
                 <article class="stat-card">
-                    <span>ارزش کل</span>
+                    <span>{% if LANGUAGE_CODE == 'fa' %}ارزش کل{% else %}Total value{% endif %}</span>
                     <strong>${{ total_value|floatformat:2|intcomma }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>سود و زیان تحقق نیافته</span>
+                    <span>{% if LANGUAGE_CODE == 'fa' %}سود و زیان تحقق نیافته{% else %}Unrealized P/L{% endif %}</span>
                     <strong>${{ total_profit|floatformat:2|intcomma }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>پرتفوی ها</span>
+                    <span>{% if LANGUAGE_CODE == 'fa' %}پرتفوی ها{% else %}Portfolios{% endif %}</span>
                     <strong>{{ portfolio_count }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>دارایی های ثبت شده</span>
+                    <span>{% if LANGUAGE_CODE == 'fa' %}دارایی های ثبت شده{% else %}Assets tracked{% endif %}</span>
                     <strong>{{ asset_count }}</strong>
                 </article>
             </div>
@@ -42,8 +42,8 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">ترکیب پرتفوی ها</h2>
-                <span class="text-muted">حساب های شما</span>
+                <h2 class="h4 mb-0">{% if LANGUAGE_CODE == 'fa' %}ترکیب پرتفوی ها{% else %}Portfolio mix{% endif %}</h2>
+                <span class="text-muted">{% if LANGUAGE_CODE == 'fa' %}حساب های شما{% else %}Your accounts{% endif %}</span>
             </div>
             <canvas id="portfolioMixChart" height="200"></canvas>
         </div>
@@ -51,8 +51,8 @@
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">تخصیص دارایی</h2>
-                <span class="text-muted">بر اساس نوع</span>
+                <h2 class="h4 mb-0">{% if LANGUAGE_CODE == 'fa' %}تخصیص دارایی{% else %}Asset allocation{% endif %}</h2>
+                <span class="text-muted">{% if LANGUAGE_CODE == 'fa' %}بر اساس نوع{% else %}By type{% endif %}</span>
             </div>
             <canvas id="allocationChart" height="200"></canvas>
         </div>
@@ -63,8 +63,8 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">پیشرفت نسبت به هدف</h2>
-                <span class="text-muted">بازده فعلی در برابر بازده هدف</span>
+                <h2 class="h4 mb-0">{% if LANGUAGE_CODE == 'fa' %}پیشرفت نسبت به هدف{% else %}Goal progress{% endif %}</h2>
+                <span class="text-muted">{% if LANGUAGE_CODE == 'fa' %}بازده فعلی در برابر بازده هدف{% else %}Target return vs current return{% endif %}</span>
             </div>
             <div class="vstack gap-3">
                 {% for portfolio in goal_progress_rows %}
@@ -72,25 +72,25 @@
                     <div class="d-flex justify-content-between align-items-center mb-2 gap-3">
                         <div>
                             <strong>{{ portfolio.name }}</strong>
-                            <div class="small text-muted">فعلی {{ portfolio.current_return|floatformat:2 }}% / هدف {{ portfolio.target_return|floatformat:2 }}%</div>
+                            <div class="small text-muted">{% if LANGUAGE_CODE == 'fa' %}فعلی {{ portfolio.current_return|floatformat:2 }}% / هدف {{ portfolio.target_return|floatformat:2 }}%{% else %}Current {{ portfolio.current_return|floatformat:2 }}% / Target {{ portfolio.target_return|floatformat:2 }}%{% endif %}</div>
                         </div>
                         <span class="badge {% if portfolio.target_gap >= 0 %}text-bg-success{% else %}text-bg-light{% endif %}">
-                            {% if portfolio.target_gap >= 0 %}+{% endif %}{{ portfolio.target_gap|floatformat:2 }} واحد
+                            {% if portfolio.target_gap >= 0 %}+{% endif %}{{ portfolio.target_gap|floatformat:2 }} {% if LANGUAGE_CODE == 'fa' %}واحد{% else %}pts{% endif %}
                         </span>
                     </div>
-                    <div class="progress progress-soft" role="progressbar" aria-label="پیشرفت {{ portfolio.name }}">
+                    <div class="progress progress-soft" role="progressbar" aria-label="{% if LANGUAGE_CODE == 'fa' %}پیشرفت {{ portfolio.name }}{% else %}{{ portfolio.name }} target progress{% endif %}">
                         <div class="progress-bar" style="width: {{ portfolio.progress_percent|floatformat:0 }}%"></div>
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">برای مقایسه با بازده هدف، یک پرتفوی و چند تراکنش ثبت کنید.</p>
+                <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}برای مقایسه با بازده هدف، یک پرتفوی و چند تراکنش ثبت کنید.{% else %}Add a portfolio and transaction history to compare target progress.{% endif %}</p>
                 {% endfor %}
             </div>
         </div>
     </div>
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
-            <h2 class="h4 mb-3">بزرگ ترین موقعیت ها</h2>
+            <h2 class="h4 mb-3">{% if LANGUAGE_CODE == 'fa' %}بزرگ ترین موقعیت ها{% else %}Largest positions{% endif %}</h2>
             <div class="vstack gap-3 mb-4">
                 {% for asset in top_assets %}
                 <article class="transaction-item">
@@ -104,10 +104,10 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">هنوز دارایی ای ثبت نشده است.</p>
+                <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}هنوز دارایی ای ثبت نشده است.{% else %}No holdings yet.{% endif %}</p>
                 {% endfor %}
             </div>
-            <h2 class="h4 mb-3">نیازمند توجه</h2>
+            <h2 class="h4 mb-3">{% if LANGUAGE_CODE == 'fa' %}نیازمند توجه{% else %}Needs attention{% endif %}</h2>
             <div class="vstack gap-3">
                 {% for asset in watchlist_assets %}
                 <article class="transaction-item">
@@ -121,7 +121,7 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">هنوز داده عملکردی کافی وجود ندارد.</p>
+                <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}هنوز داده عملکردی کافی وجود ندارد.{% else %}No performance data yet.{% endif %}</p>
                 {% endfor %}
             </div>
         </div>
@@ -132,17 +132,17 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">پرتفوی های شما</h2>
-                <a href="{% url 'portfolio:list' %}" class="text-decoration-none">مشاهده همه</a>
+                <h2 class="h4 mb-0">{% if LANGUAGE_CODE == 'fa' %}پرتفوی های شما{% else %}Your portfolios{% endif %}</h2>
+                <a href="{% url 'portfolio:list' %}" class="text-decoration-none">{% if LANGUAGE_CODE == 'fa' %}مشاهده همه{% else %}View all{% endif %}</a>
             </div>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th>نام</th>
-                            <th>ارزش کل</th>
-                            <th>سرمایه گذاری</th>
-                            <th>هدف</th>
+                            <th>{% if LANGUAGE_CODE == 'fa' %}نام{% else %}Name{% endif %}</th>
+                            <th>{% if LANGUAGE_CODE == 'fa' %}ارزش کل{% else %}Total value{% endif %}</th>
+                            <th>{% if LANGUAGE_CODE == 'fa' %}سرمایه گذاری{% else %}Invested{% endif %}</th>
+                            <th>{% if LANGUAGE_CODE == 'fa' %}هدف{% else %}Target{% endif %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -155,7 +155,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-muted">هنوز پرتفویی ندارید. برای شروع اولین پرتفوی خود را بسازید.</td>
+                            <td colspan="4" class="text-muted">{% if LANGUAGE_CODE == 'fa' %}هنوز پرتفویی ندارید. برای شروع اولین پرتفوی خود را بسازید.{% else %}No portfolios yet. Create your first one to get started.{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -166,8 +166,8 @@
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">آخرین تراکنش ها</h2>
-                <a href="{% url 'portfolio:transactions' %}" class="text-decoration-none">مشاهده همه</a>
+                <h2 class="h4 mb-0">{% if LANGUAGE_CODE == 'fa' %}آخرین تراکنش ها{% else %}Recent transactions{% endif %}</h2>
+                <a href="{% url 'portfolio:transactions' %}" class="text-decoration-none">{% if LANGUAGE_CODE == 'fa' %}مشاهده همه{% else %}View all{% endif %}</a>
             </div>
             <div class="vstack gap-3">
                 {% for transaction in recent_transactions %}
@@ -182,7 +182,7 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">هنوز تراکنشی ثبت نشده است.</p>
+                <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}هنوز تراکنشی ثبت نشده است.{% else %}No transactions logged yet.{% endif %}</p>
                 {% endfor %}
             </div>
         </div>
@@ -201,7 +201,7 @@ if (portfolioMixCtx && {{ portfolio_mix_values|safe }}.length) {
     data: {
       labels: {{ portfolio_mix_labels|safe }},
       datasets: [{
-        label: 'ارزش پرتفوی',
+        label: '{% if LANGUAGE_CODE == "fa" %}ارزش پرتفوی{% else %}Portfolio value{% endif %}',
         data: {{ portfolio_mix_values|safe }},
         borderRadius: 12,
         backgroundColor: ['#0f766e', '#f97316', '#dc2626', '#ca8a04', '#2563eb']

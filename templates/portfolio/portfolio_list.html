@@ -22,25 +22,25 @@
                     <h2 class="h4 mb-1"><a class="text-decoration-none" href="{% url 'portfolio:detail' portfolio.pk %}">{{ portfolio.name }}</a></h2>
                     <p class="text-muted mb-0">{{ request.user.username }}</p>
                 </div>
-                <span class="badge text-bg-light">{{ portfolio.assets.count }} دارایی</span>
+                <span class="badge text-bg-light">{{ portfolio.assets.count }} {% if LANGUAGE_CODE == 'fa' %}دارایی{% else %}assets{% endif %}</span>
             </div>
-            <p class="text-muted">{{ portfolio.description|default:'هنوز توضیحی ثبت نشده است.' }}</p>
+            <p class="text-muted">{{ portfolio.description|default:default_description }}</p>
             <dl class="mb-0 small portfolio-meta">
-                <div><dt>ارزش کل</dt><dd>${{ portfolio.total_value|floatformat:2|intcomma }}</dd></div>
-                <div><dt>موجودی نقدی</dt><dd>${{ portfolio.cash_balance|floatformat:2|intcomma }}</dd></div>
-                <div><dt>بازده هدف</dt><dd>{{ portfolio.target_return }}%</dd></div>
+                <div><dt>{% if LANGUAGE_CODE == 'fa' %}ارزش کل{% else %}Total value{% endif %}</dt><dd>${{ portfolio.total_value|floatformat:2|intcomma }}</dd></div>
+                <div><dt>{% if LANGUAGE_CODE == 'fa' %}موجودی نقدی{% else %}Cash balance{% endif %}</dt><dd>${{ portfolio.cash_balance|floatformat:2|intcomma }}</dd></div>
+                <div><dt>{% if LANGUAGE_CODE == 'fa' %}بازده هدف{% else %}Target return{% endif %}</dt><dd>{{ portfolio.target_return }}%</dd></div>
             </dl>
             <div class="d-flex gap-2 pt-3">
-                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:detail' portfolio.pk %}">مشاهده</a>
-                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:edit' portfolio.pk %}">ویرایش</a>
+                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:detail' portfolio.pk %}">{% if LANGUAGE_CODE == 'fa' %}مشاهده{% else %}Open{% endif %}</a>
+                <a class="btn btn-outline-dark btn-sm" href="{% url 'portfolio:edit' portfolio.pk %}">{% if LANGUAGE_CODE == 'fa' %}ویرایش{% else %}Edit{% endif %}</a>
             </div>
         </article>
     </div>
     {% empty %}
     <div class="col-12">
         <div class="panel p-5 text-center">
-            <h2 class="h3">هنوز پرتفویی ندارید</h2>
-            <p class="text-muted">با ایجاد یک پرتفوی شروع کنید و سپس دارایی ها و تراکنش ها را اضافه کنید.</p>
+            <h2 class="h3">{% if LANGUAGE_CODE == 'fa' %}هنوز پرتفویی ندارید{% else %}No portfolios yet{% endif %}</h2>
+            <p class="text-muted">{% if LANGUAGE_CODE == 'fa' %}با ایجاد یک پرتفوی شروع کنید و سپس دارایی ها و تراکنش ها را اضافه کنید.{% else %}Start by creating a portfolio and then add assets and transactions.{% endif %}</p>
         </div>
     </div>
     {% endfor %}

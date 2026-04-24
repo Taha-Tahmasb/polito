@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}حذف {{ object.name }} | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}حذف {{ object.name }}{% else %}Delete {{ object.name }}{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="form-shell mx-auto">
     <div class="mb-4 text-center">
-        <p class="eyebrow mb-2">منطقه حساس</p>
-        <h1 class="mb-2">پرتفوی {{ object.name }} حذف شود؟</h1>
-        <p class="text-muted mb-0">با این کار پرتفوی، دارایی ها و کل تاریخچه تراکنش های آن حذف می شود.</p>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}منطقه حساس{% else %}Danger zone{% endif %}</p>
+        <h1 class="mb-2">{% if LANGUAGE_CODE == 'fa' %}پرتفوی {{ object.name }} حذف شود؟{% else %}Delete {{ object.name }}?{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}با این کار پرتفوی، دارایی ها و کل تاریخچه تراکنش های آن حذف می شود.{% else %}This removes the portfolio, its assets, and all of its transaction history.{% endif %}</p>
     </div>
     <div class="panel p-4 p-lg-5">
         <form method="post" class="vstack gap-3">
             {% csrf_token %}
-            <p class="mb-0">این عملیات قابل بازگشت نیست.</p>
+            <p class="mb-0">{% if LANGUAGE_CODE == 'fa' %}این عملیات قابل بازگشت نیست.{% else %}This action cannot be undone.{% endif %}</p>
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-danger">حذف پرتفوی</button>
-                <a href="{% url 'portfolio:detail' object.pk %}" class="btn btn-outline-dark">انصراف</a>
+                <button type="submit" class="btn btn-danger">{% if LANGUAGE_CODE == 'fa' %}حذف پرتفوی{% else %}Delete portfolio{% endif %}</button>
+                <a href="{% url 'portfolio:detail' object.pk %}" class="btn btn-outline-dark">{% if LANGUAGE_CODE == 'fa' %}انصراف{% else %}Cancel{% endif %}</a>
             </div>
         </form>
     </div>
