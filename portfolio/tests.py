@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
@@ -228,3 +229,16 @@ class PortfolioViewsTests(TestCase):
         response = self.client.get(reverse('portfolio:transactions'))
         self.assertContains(response, 'Income Plan')
         self.assertNotContains(response, 'Private Plan')
+
+
+class SeedDemoDataCommandTests(TestCase):
+    def test_seed_demo_data_creates_reusable_demo_workspace(self):
+        call_command('seed_demo_data', username='demo_user', password='StrongPass123!')
+
+        user = User.objects.get(username='demo_user')
+        self.assertEqual(user.portfolios.count(), 2)
+        self.assertTrue(user.check_password('StrongPass123!'))
+        self.assertEqual(
+            Transaction.objects.filter(portfolio__owner=user).count(),
+            4,
+        )
