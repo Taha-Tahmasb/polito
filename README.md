@@ -87,6 +87,7 @@ This makes it a strong GitHub project because it demonstrates:
         <li>Link activity to portfolios and assets</li>
         <li>Review recent activity from the dashboard and full history page</li>
         <li>Filter and export transaction history to CSV</li>
+        <li>Export holdings for a single portfolio as CSV</li>
       </ul>
     </td>
   </tr>
@@ -242,6 +243,7 @@ password: DemoPass123!
 | `/portfolios/` | Portfolio list |
 | `/portfolios/create/` | Create a portfolio |
 | `/portfolios/<id>/` | Portfolio detail |
+| `/portfolios/<id>/export/` | Export a portfolio's holdings as CSV |
 | `/portfolios/<id>/edit/` | Update a portfolio |
 | `/portfolios/<id>/delete/` | Delete a portfolio |
 | `/assets/create/` | Add an asset |
@@ -334,6 +336,7 @@ Current automated tests cover:
 - ownership isolation between users
 - authenticated portfolio creation, editing, and activity views
 - transaction filtering and CSV exports
+- portfolio-level holdings exports
 - dashboard insights for goal progress and key holdings
 
 ## GitHub Presentation Tips
