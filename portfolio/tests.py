@@ -315,6 +315,24 @@ class PortfolioViewsTests(TestCase):
         self.assertContains(response, 'Largest positions')
         self.assertContains(response, 'KO')
 
+    def test_portfolio_holdings_export_returns_csv(self):
+        Asset.objects.create(
+            portfolio=self.portfolio,
+            symbol='KO',
+            name='Coca-Cola',
+            asset_type=Asset.AssetType.STOCK,
+            quantity=Decimal('12'),
+            average_cost=Decimal('55'),
+            current_price=Decimal('60'),
+        )
+
+        self.client.login(username='jamie', password='secret123')
+        response = self.client.get(reverse('portfolio:export', args=[self.portfolio.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+        self.assertContains(response, 'symbol,name,type')
+        self.assertContains(response, 'KO')
+
 
 class SeedDemoDataCommandTests(TestCase):
     def test_seed_demo_data_creates_reusable_demo_workspace(self):

@@ -139,6 +139,35 @@ class PortfolioDetailView(OwnerQuerysetMixin, DetailView):
         return self.get_portfolios().prefetch_related('assets', 'transactions__asset')
 
 
+class PortfolioHoldingsExportView(OwnerQuerysetMixin, DetailView):
+    model = Portfolio
+
+    def get_queryset(self):
+        return self.get_portfolios().prefetch_related('assets')
+
+    def render_to_response(self, context, **response_kwargs):
+        portfolio = context['portfolio']
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="portfolio-{portfolio.pk}-holdings.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['symbol', 'name', 'type', 'quantity', 'average_cost', 'current_price', 'market_value', 'pnl'])
+        for asset in portfolio.assets.all():
+            writer.writerow(
+                [
+                    asset.symbol,
+                    asset.name,
+                    asset.get_asset_type_display(),
+                    asset.quantity,
+                    asset.average_cost,
+                    asset.current_price,
+                    asset.market_value,
+                    asset.pnl,
+                ]
+            )
+        return response
+
+
 class PortfolioCreateView(OwnerQuerysetMixin, CreateView):
     model = Portfolio
     form_class = PortfolioForm
