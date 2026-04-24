@@ -10,10 +10,41 @@
         <h1 class="mb-1">Transaction history</h1>
         <p class="text-muted mb-0">Review every deposit, trade, and dividend across your portfolios.</p>
     </div>
-    <a class="btn btn-accent" href="{% url 'portfolio:transaction-create' %}">Log transaction</a>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-dark" href="{% url 'portfolio:transactions-export' %}?portfolio={{ selected_portfolio }}&type={{ selected_type }}">Export CSV</a>
+        <a class="btn btn-accent" href="{% url 'portfolio:transaction-create' %}">Log transaction</a>
+    </div>
 </section>
 
 <section class="panel p-4">
+    <form method="get" class="row g-3 align-items-end mb-4">
+        <div class="col-md-5">
+            <label class="form-label" for="portfolioFilter">Portfolio</label>
+            <select id="portfolioFilter" name="portfolio" class="form-select">
+                <option value="">All portfolios</option>
+                {% for portfolio in filter_portfolios %}
+                <option value="{{ portfolio.pk }}"{% if selected_portfolio == portfolio.pk|stringformat:'s' %} selected{% endif %}>{{ portfolio.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="typeFilter">Transaction type</label>
+            <select id="typeFilter" name="type" class="form-select">
+                <option value="">All activity</option>
+                {% for value, label in transaction_types %}
+                <option value="{{ value }}"{% if selected_type == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-accent w-100" type="submit">Apply</button>
+            <a class="btn btn-outline-dark w-100" href="{% url 'portfolio:transactions' %}">Reset</a>
+        </div>
+    </form>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <p class="text-muted mb-0">Filtered total: <strong>${{ filtered_total|floatformat:2|intcomma }}</strong></p>
+        <p class="text-muted mb-0">{{ page_obj.paginator.count }} transaction{{ page_obj.paginator.count|pluralize }}</p>
+    </div>
     <div class="table-responsive">
         <table class="table align-middle">
             <thead>

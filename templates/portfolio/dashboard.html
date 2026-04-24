@@ -59,6 +59,75 @@
     </div>
 </section>
 
+<section class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Goal progress</h2>
+                <span class="text-muted">Target return vs current return</span>
+            </div>
+            <div class="vstack gap-3">
+                {% for portfolio in goal_progress_rows %}
+                <article class="progress-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2 gap-3">
+                        <div>
+                            <strong>{{ portfolio.name }}</strong>
+                            <div class="small text-muted">Current {{ portfolio.current_return|floatformat:2 }}% / Target {{ portfolio.target_return|floatformat:2 }}%</div>
+                        </div>
+                        <span class="badge {% if portfolio.target_gap >= 0 %}text-bg-success{% else %}text-bg-light{% endif %}">
+                            {% if portfolio.target_gap >= 0 %}+{% endif %}{{ portfolio.target_gap|floatformat:2 }} pts
+                        </span>
+                    </div>
+                    <div class="progress progress-soft" role="progressbar" aria-label="{{ portfolio.name }} target progress">
+                        <div class="progress-bar" style="width: {{ portfolio.progress_percent|floatformat:0 }}%"></div>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">Add a portfolio and transaction history to compare target progress.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel p-4 h-100">
+            <h2 class="h4 mb-3">Largest positions</h2>
+            <div class="vstack gap-3 mb-4">
+                {% for asset in top_assets %}
+                <article class="transaction-item">
+                    <div>
+                        <strong>{{ asset.symbol }}</strong>
+                        <div class="text-muted small">{{ asset.portfolio.name }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div>${{ asset.market_value|floatformat:2|intcomma }}</div>
+                        <div class="small text-muted">{{ asset.get_asset_type_display }}</div>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">No holdings yet.</p>
+                {% endfor %}
+            </div>
+            <h2 class="h4 mb-3">Needs attention</h2>
+            <div class="vstack gap-3">
+                {% for asset in watchlist_assets %}
+                <article class="transaction-item">
+                    <div>
+                        <strong>{{ asset.symbol }}</strong>
+                        <div class="text-muted small">{{ asset.portfolio.name }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="{% if asset.pnl >= 0 %}text-success{% else %}text-danger{% endif %}">{{ asset.pnl_percent|floatformat:2 }}%</div>
+                        <div class="small text-muted">${{ asset.pnl|floatformat:2|intcomma }}</div>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">No performance data yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="row g-4">
     <div class="col-lg-7">
         <div class="panel p-4 h-100">

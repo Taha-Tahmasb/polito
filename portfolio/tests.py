@@ -230,6 +230,91 @@ class PortfolioViewsTests(TestCase):
         self.assertContains(response, 'Income Plan')
         self.assertNotContains(response, 'Private Plan')
 
+    def test_transaction_list_supports_filters(self):
+        asset = Asset.objects.create(
+            portfolio=self.portfolio,
+            symbol='KO',
+            name='Coca-Cola',
+            asset_type=Asset.AssetType.STOCK,
+            quantity=Decimal('12'),
+            average_cost=Decimal('55'),
+            current_price=Decimal('60'),
+        )
+        Transaction.objects.create(
+            portfolio=self.portfolio,
+            asset=asset,
+            transaction_type=Transaction.TransactionType.DIVIDEND,
+            quantity=Decimal('1'),
+            price_per_unit=Decimal('12.00'),
+        )
+        Transaction.objects.create(
+            portfolio=self.portfolio,
+            asset=asset,
+            transaction_type=Transaction.TransactionType.BUY,
+            quantity=Decimal('2'),
+            price_per_unit=Decimal('58.00'),
+            notes='Accumulated shares',
+        )
+
+        self.client.login(username='jamie', password='secret123')
+        response = self.client.get(
+            reverse('portfolio:transactions'),
+            {'portfolio': self.portfolio.pk, 'type': Transaction.TransactionType.DIVIDEND},
+        )
+        self.assertContains(response, 'Filtered total')
+        self.assertContains(response, '$12.00')
+        self.assertNotContains(response, 'Accumulated shares')
+
+    def test_transaction_export_returns_csv(self):
+        asset = Asset.objects.create(
+            portfolio=self.portfolio,
+            symbol='KO',
+            name='Coca-Cola',
+            asset_type=Asset.AssetType.STOCK,
+            quantity=Decimal('12'),
+            average_cost=Decimal('55'),
+            current_price=Decimal('60'),
+        )
+        Transaction.objects.create(
+            portfolio=self.portfolio,
+            asset=asset,
+            transaction_type=Transaction.TransactionType.DIVIDEND,
+            quantity=Decimal('1'),
+            price_per_unit=Decimal('12.00'),
+            notes='Quarterly payout',
+        )
+
+        self.client.login(username='jamie', password='secret123')
+        response = self.client.get(reverse('portfolio:transactions-export'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv')
+        self.assertContains(response, 'Income Plan')
+        self.assertContains(response, 'Quarterly payout')
+
+    def test_dashboard_includes_goal_progress_and_asset_insights(self):
+        asset = Asset.objects.create(
+            portfolio=self.portfolio,
+            symbol='KO',
+            name='Coca-Cola',
+            asset_type=Asset.AssetType.STOCK,
+            quantity=Decimal('12'),
+            average_cost=Decimal('55'),
+            current_price=Decimal('60'),
+        )
+        Transaction.objects.create(
+            portfolio=self.portfolio,
+            asset=asset,
+            transaction_type=Transaction.TransactionType.BUY,
+            quantity=Decimal('12'),
+            price_per_unit=Decimal('55.00'),
+        )
+
+        self.client.login(username='jamie', password='secret123')
+        response = self.client.get(reverse('portfolio:dashboard'))
+        self.assertContains(response, 'Goal progress')
+        self.assertContains(response, 'Largest positions')
+        self.assertContains(response, 'KO')
+
 
 class SeedDemoDataCommandTests(TestCase):
     def test_seed_demo_data_creates_reusable_demo_workspace(self):

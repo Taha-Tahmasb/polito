@@ -1,12 +1,13 @@
 import json
 from decimal import Decimal
+import csv
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import DecimalField, ExpressionWrapper, F, Sum
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
@@ -64,12 +65,22 @@ class DashboardView(OwnerQuerysetMixin, TemplateView):
         total_value = Decimal('0')
         total_profit = Decimal('0')
         for portfolio in portfolios:
+            invested_amount = portfolio.invested_amount
+            current_return = Decimal('0')
+            progress_percent = Decimal('0')
+            if invested_amount > 0:
+                current_return = (portfolio.unrealized_profit / invested_amount) * 100
+            if portfolio.target_return > 0:
+                progress_percent = max(Decimal('0'), min((current_return / portfolio.target_return) * 100, Decimal('100')))
             row = {
                 'id': portfolio.pk,
                 'name': portfolio.name,
                 'total_value': portfolio.total_value,
-                'invested_amount': portfolio.invested_amount,
+                'invested_amount': invested_amount,
                 'target_return': portfolio.target_return,
+                'current_return': current_return,
+                'target_gap': current_return - portfolio.target_return,
+                'progress_percent': progress_percent,
             }
             portfolio_rows.append(row)
             total_value += row['total_value']
@@ -87,6 +98,8 @@ class DashboardView(OwnerQuerysetMixin, TemplateView):
             )
             .order_by('asset_type')
         )
+        top_assets = sorted(assets, key=lambda asset: asset.market_value, reverse=True)[:3]
+        watchlist_assets = sorted(assets, key=lambda asset: asset.pnl_percent)[:3]
         context.update(
             {
                 'portfolio_count': len(portfolios),
@@ -100,6 +113,9 @@ class DashboardView(OwnerQuerysetMixin, TemplateView):
                 'allocation_values': json.dumps([float(item['total']) for item in allocation]),
                 'portfolio_mix_labels': json.dumps([row['name'] for row in portfolio_rows]),
                 'portfolio_mix_values': json.dumps([float(row['total_value']) for row in portfolio_rows]),
+                'goal_progress_rows': sorted(portfolio_rows, key=lambda row: row['target_gap'], reverse=True),
+                'top_assets': top_assets,
+                'watchlist_assets': watchlist_assets,
             }
         )
         return context
@@ -233,11 +249,67 @@ class TransactionListView(OwnerQuerysetMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return (
+        queryset = (
             Transaction.objects.filter(portfolio__owner=self.request.user)
             .select_related('portfolio', 'asset')
             .order_by('-executed_at', '-created_at')
         )
+
+        portfolio_id = self.request.GET.get('portfolio')
+        transaction_type = self.request.GET.get('type')
+        if portfolio_id:
+            queryset = queryset.filter(portfolio_id=portfolio_id)
+        if transaction_type:
+            queryset = queryset.filter(transaction_type=transaction_type)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        filtered_transactions = self.get_queryset()
+        context.update(
+            {
+                'filter_portfolios': self.get_portfolios(),
+                'transaction_types': Transaction.TransactionType.choices,
+                'selected_portfolio': self.request.GET.get('portfolio', ''),
+                'selected_type': self.request.GET.get('type', ''),
+                'filtered_total': sum((item.total_amount for item in filtered_transactions), Decimal('0')),
+            }
+        )
+        return context
+
+
+class TransactionExportView(OwnerQuerysetMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        transactions = (
+            Transaction.objects.filter(portfolio__owner=request.user)
+            .select_related('portfolio', 'asset')
+            .order_by('-executed_at', '-created_at')
+        )
+
+        portfolio_id = request.GET.get('portfolio')
+        transaction_type = request.GET.get('type')
+        if portfolio_id:
+            transactions = transactions.filter(portfolio_id=portfolio_id)
+        if transaction_type:
+            transactions = transactions.filter(transaction_type=transaction_type)
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="polito-transactions.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['date', 'type', 'portfolio', 'asset', 'amount', 'notes'])
+        for transaction in transactions:
+            writer.writerow(
+                [
+                    transaction.executed_at.isoformat(),
+                    transaction.get_transaction_type_display(),
+                    transaction.portfolio.name,
+                    transaction.asset.symbol if transaction.asset else 'Cash movement',
+                    transaction.total_amount,
+                    transaction.notes,
+                ]
+            )
+        return response
 
 
 class TransactionCreateView(OwnerQuerysetMixin, CreateView):
