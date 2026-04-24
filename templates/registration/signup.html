@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}Create account | Polito{% endblock %}
+{% block title %}ایجاد حساب | Polito{% endblock %}
 
 {% block content %}
 <section class="form-shell mx-auto auth-shell">
     <div class="mb-4 text-center">
-        <p class="eyebrow mb-2">Get started</p>
-        <h1 class="mb-2">Create your Polito account</h1>
-        <p class="text-muted mb-0">Set up a user account first, then create portfolios that belong to you.</p>
+        <p class="eyebrow mb-2">شروع کنید</p>
+        <h1 class="mb-2">حساب فارسی Polito را بسازید</h1>
+        <p class="text-muted mb-0">ابتدا حساب کاربری خود را بسازید و سپس پرتفوی های شخصی خودتان را مدیریت کنید.</p>
     </div>
     <div class="panel p-4 p-lg-5">
         <form method="post" class="vstack gap-3">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-accent">Create account</button>
+            <button type="submit" class="btn btn-accent">ایجاد حساب</button>
         </form>
-        <p class="text-muted mt-4 mb-0">Already registered? <a href="{% url 'portfolio:login' %}">Log in</a>.</p>
+        <p class="text-muted mt-4 mb-0">قبلا ثبت نام کرده اید؟ <a href="{% url 'portfolio:login' %}">ورود</a>.</p>
     </div>
 </section>
 {% endblock %}

@@ -4,7 +4,9 @@
 
 ### Django Portfolio Management System
 
-A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard.
+### Persian RTL Edition
+
+A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard, now adapted for a Persian RTL experience.
 
 <p>
   <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">

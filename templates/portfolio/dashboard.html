@@ -1,36 +1,36 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Dashboard | Polito{% endblock %}
+{% block title %}داشبورد | Polito{% endblock %}
 
 {% block content %}
 <section class="hero-card p-4 p-lg-5 mb-4">
     <div class="row align-items-center g-4">
         <div class="col-lg-7">
-            <p class="eyebrow mb-2">Portfolio overview</p>
-            <h1 class="display-5 mb-3">Welcome back, {{ request.user.username }}. Manage your assets and performance in one place.</h1>
-            <p class="lead text-muted mb-4">Track positions, understand allocation, and keep every portfolio decision visible inside your own authenticated workspace.</p>
+            <p class="eyebrow mb-2">نمای کلی پرتفوی</p>
+            <h1 class="display-5 mb-3">{{ request.user.username }}، دوباره خوش آمدید. دارایی ها و عملکرد خود را یکجا مدیریت کنید.</h1>
+            <p class="lead text-muted mb-4">موقعیت ها را دنبال کنید، ترکیب دارایی ها را ببینید و همه تصمیم های سرمایه گذاری را در فضای فارسی و شخصی خود ثبت کنید.</p>
             <div class="d-flex flex-wrap gap-3">
-                <a class="btn btn-accent btn-lg" href="{% url 'portfolio:create' %}">Create portfolio</a>
-                <a class="btn btn-outline-dark btn-lg" href="{% url 'portfolio:transaction-create' %}">Log transaction</a>
+                <a class="btn btn-accent btn-lg" href="{% url 'portfolio:create' %}">ایجاد پرتفوی</a>
+                <a class="btn btn-outline-dark btn-lg" href="{% url 'portfolio:transaction-create' %}">ثبت تراکنش</a>
             </div>
         </div>
         <div class="col-lg-5">
             <div class="stat-grid">
                 <article class="stat-card">
-                    <span>Total value</span>
+                    <span>ارزش کل</span>
                     <strong>${{ total_value|floatformat:2|intcomma }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Unrealized P/L</span>
+                    <span>سود و زیان تحقق نیافته</span>
                     <strong>${{ total_profit|floatformat:2|intcomma }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Portfolios</span>
+                    <span>پرتفوی ها</span>
                     <strong>{{ portfolio_count }}</strong>
                 </article>
                 <article class="stat-card">
-                    <span>Assets tracked</span>
+                    <span>دارایی های ثبت شده</span>
                     <strong>{{ asset_count }}</strong>
                 </article>
             </div>
@@ -42,8 +42,8 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Portfolio mix</h2>
-                <span class="text-muted">Your accounts</span>
+                <h2 class="h4 mb-0">ترکیب پرتفوی ها</h2>
+                <span class="text-muted">حساب های شما</span>
             </div>
             <canvas id="portfolioMixChart" height="200"></canvas>
         </div>
@@ -51,8 +51,8 @@
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Asset allocation</h2>
-                <span class="text-muted">By type</span>
+                <h2 class="h4 mb-0">تخصیص دارایی</h2>
+                <span class="text-muted">بر اساس نوع</span>
             </div>
             <canvas id="allocationChart" height="200"></canvas>
         </div>
@@ -63,8 +63,8 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Goal progress</h2>
-                <span class="text-muted">Target return vs current return</span>
+                <h2 class="h4 mb-0">پیشرفت نسبت به هدف</h2>
+                <span class="text-muted">بازده فعلی در برابر بازده هدف</span>
             </div>
             <div class="vstack gap-3">
                 {% for portfolio in goal_progress_rows %}
@@ -72,25 +72,25 @@
                     <div class="d-flex justify-content-between align-items-center mb-2 gap-3">
                         <div>
                             <strong>{{ portfolio.name }}</strong>
-                            <div class="small text-muted">Current {{ portfolio.current_return|floatformat:2 }}% / Target {{ portfolio.target_return|floatformat:2 }}%</div>
+                            <div class="small text-muted">فعلی {{ portfolio.current_return|floatformat:2 }}% / هدف {{ portfolio.target_return|floatformat:2 }}%</div>
                         </div>
                         <span class="badge {% if portfolio.target_gap >= 0 %}text-bg-success{% else %}text-bg-light{% endif %}">
-                            {% if portfolio.target_gap >= 0 %}+{% endif %}{{ portfolio.target_gap|floatformat:2 }} pts
+                            {% if portfolio.target_gap >= 0 %}+{% endif %}{{ portfolio.target_gap|floatformat:2 }} واحد
                         </span>
                     </div>
-                    <div class="progress progress-soft" role="progressbar" aria-label="{{ portfolio.name }} target progress">
+                    <div class="progress progress-soft" role="progressbar" aria-label="پیشرفت {{ portfolio.name }}">
                         <div class="progress-bar" style="width: {{ portfolio.progress_percent|floatformat:0 }}%"></div>
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">Add a portfolio and transaction history to compare target progress.</p>
+                <p class="text-muted mb-0">برای مقایسه با بازده هدف، یک پرتفوی و چند تراکنش ثبت کنید.</p>
                 {% endfor %}
             </div>
         </div>
     </div>
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
-            <h2 class="h4 mb-3">Largest positions</h2>
+            <h2 class="h4 mb-3">بزرگ ترین موقعیت ها</h2>
             <div class="vstack gap-3 mb-4">
                 {% for asset in top_assets %}
                 <article class="transaction-item">
@@ -104,10 +104,10 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">No holdings yet.</p>
+                <p class="text-muted mb-0">هنوز دارایی ای ثبت نشده است.</p>
                 {% endfor %}
             </div>
-            <h2 class="h4 mb-3">Needs attention</h2>
+            <h2 class="h4 mb-3">نیازمند توجه</h2>
             <div class="vstack gap-3">
                 {% for asset in watchlist_assets %}
                 <article class="transaction-item">
@@ -121,7 +121,7 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">No performance data yet.</p>
+                <p class="text-muted mb-0">هنوز داده عملکردی کافی وجود ندارد.</p>
                 {% endfor %}
             </div>
         </div>
@@ -132,17 +132,17 @@
     <div class="col-lg-7">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Your portfolios</h2>
-                <a href="{% url 'portfolio:list' %}" class="text-decoration-none">View all</a>
+                <h2 class="h4 mb-0">پرتفوی های شما</h2>
+                <a href="{% url 'portfolio:list' %}" class="text-decoration-none">مشاهده همه</a>
             </div>
             <div class="table-responsive">
                 <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Total value</th>
-                            <th>Invested</th>
-                            <th>Target</th>
+                            <th>نام</th>
+                            <th>ارزش کل</th>
+                            <th>سرمایه گذاری</th>
+                            <th>هدف</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -155,7 +155,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-muted">No portfolios yet. Create your first one to get started.</td>
+                            <td colspan="4" class="text-muted">هنوز پرتفویی ندارید. برای شروع اولین پرتفوی خود را بسازید.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -166,8 +166,8 @@
     <div class="col-lg-5">
         <div class="panel p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Recent transactions</h2>
-                <a href="{% url 'portfolio:transactions' %}" class="text-decoration-none">View all</a>
+                <h2 class="h4 mb-0">آخرین تراکنش ها</h2>
+                <a href="{% url 'portfolio:transactions' %}" class="text-decoration-none">مشاهده همه</a>
             </div>
             <div class="vstack gap-3">
                 {% for transaction in recent_transactions %}
@@ -182,7 +182,7 @@
                     </div>
                 </article>
                 {% empty %}
-                <p class="text-muted mb-0">No transactions logged yet.</p>
+                <p class="text-muted mb-0">هنوز تراکنشی ثبت نشده است.</p>
                 {% endfor %}
             </div>
         </div>
@@ -201,7 +201,7 @@ if (portfolioMixCtx && {{ portfolio_mix_values|safe }}.length) {
     data: {
       labels: {{ portfolio_mix_labels|safe }},
       datasets: [{
-        label: 'Portfolio value',
+        label: 'ارزش پرتفوی',
         data: {{ portfolio_mix_values|safe }},
         borderRadius: 12,
         backgroundColor: ['#0f766e', '#f97316', '#dc2626', '#ca8a04', '#2563eb']

@@ -8,18 +8,18 @@ from portfolio.services import apply_transaction
 
 
 class Command(BaseCommand):
-    help = 'Create a reusable demo user with sample portfolios, assets, and transactions.'
+    help = 'یک کاربر نمایشی با پرتفوی، دارایی و تراکنش های نمونه ایجاد می کند.'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--username',
             default='demo',
-            help='Username for the seeded demo account.',
+            help='نام کاربری حساب نمایشی.',
         )
         parser.add_argument(
             '--password',
             default='DemoPass123!',
-            help='Password for the seeded demo account.',
+            help='رمز عبور حساب نمایشی.',
         )
 
     def handle(self, *args, **options):
@@ -37,25 +37,25 @@ class Command(BaseCommand):
         if created:
             user.set_password(password)
             user.save(update_fields=['password'])
-            self.stdout.write(self.style.SUCCESS(f'Created demo user "{username}".'))
+            self.stdout.write(self.style.SUCCESS(f'کاربر نمایشی "{username}" ساخته شد.'))
         else:
-            self.stdout.write(self.style.WARNING(f'Using existing user "{username}".'))
+            self.stdout.write(self.style.WARNING(f'از کاربر موجود "{username}" استفاده می شود.'))
 
         if user.portfolios.exists():
-            self.stdout.write(self.style.WARNING('Demo data already exists for this user. Nothing changed.'))
+            self.stdout.write(self.style.WARNING('برای این کاربر از قبل داده نمایشی وجود دارد و تغییری اعمال نشد.'))
             return
 
         growth = Portfolio.objects.create(
             owner=user,
-            name='Global Growth',
-            description='Long-term equities and ETFs with broad market exposure.',
+            name='رشد جهانی',
+            description='ترکیبی از سهام و ETF برای رشد بلندمدت.',
             cash_balance=Decimal('2000.00'),
             target_return=Decimal('11.50'),
         )
         income = Portfolio.objects.create(
             owner=user,
-            name='Income Engine',
-            description='Dividend and fixed-income ideas for steadier cash flow.',
+            name='درآمد پایدار',
+            description='تمرکز بر سود نقدی و جریان نقدی باثبات.',
             cash_balance=Decimal('3500.00'),
             target_return=Decimal('7.50'),
         )
@@ -63,7 +63,7 @@ class Command(BaseCommand):
         growth_equity = Asset.objects.create(
             portfolio=growth,
             symbol='NVDA',
-            name='NVIDIA',
+            name='انویدیا',
             asset_type=Asset.AssetType.STOCK,
             quantity=Decimal('8'),
             average_cost=Decimal('110.00'),
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         growth_etf = Asset.objects.create(
             portfolio=growth,
             symbol='QQQ',
-            name='Invesco QQQ Trust',
+            name='صندوق QQQ',
             asset_type=Asset.AssetType.ETF,
             quantity=Decimal('5'),
             average_cost=Decimal('410.00'),
@@ -81,7 +81,7 @@ class Command(BaseCommand):
         income_equity = Asset.objects.create(
             portfolio=income,
             symbol='JNJ',
-            name='Johnson & Johnson',
+            name='جانسون اند جانسون',
             asset_type=Asset.AssetType.STOCK,
             quantity=Decimal('14'),
             average_cost=Decimal('148.00'),
@@ -95,7 +95,7 @@ class Command(BaseCommand):
                 transaction_type=Transaction.TransactionType.BUY,
                 quantity=Decimal('2'),
                 price_per_unit=Decimal('126.00'),
-                notes='Scaled into semiconductor strength.',
+                notes='افزایش موقعیت در روند صعودی نیمه هادی.',
             )
         )
         apply_transaction(
@@ -105,7 +105,7 @@ class Command(BaseCommand):
                 transaction_type=Transaction.TransactionType.DIVIDEND,
                 quantity=Decimal('1'),
                 price_per_unit=Decimal('18.50'),
-                notes='Quarterly ETF distribution.',
+                notes='دریافت سود دوره ای ETF.',
             )
         )
         apply_transaction(
@@ -115,7 +115,7 @@ class Command(BaseCommand):
                 transaction_type=Transaction.TransactionType.BUY,
                 quantity=Decimal('3'),
                 price_per_unit=Decimal('154.00'),
-                notes='Added on valuation dip.',
+                notes='خرید در محدوده ارزنده تر.',
             )
         )
         apply_transaction(
@@ -124,9 +124,9 @@ class Command(BaseCommand):
                 transaction_type=Transaction.TransactionType.DEPOSIT,
                 quantity=Decimal('1'),
                 price_per_unit=Decimal('1200.00'),
-                notes='Monthly contribution.',
+                notes='واریز ماهانه.',
             )
         )
 
-        self.stdout.write(self.style.SUCCESS('Seeded demo portfolios, assets, and transactions.'))
-        self.stdout.write(self.style.SUCCESS(f'Login with username "{username}" and password "{password}".'))
+        self.stdout.write(self.style.SUCCESS('پرتفوی ها، دارایی ها و تراکنش های نمایشی ساخته شدند.'))
+        self.stdout.write(self.style.SUCCESS(f'با نام کاربری "{username}" و رمز عبور "{password}" وارد شوید.'))

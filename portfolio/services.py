@@ -11,23 +11,23 @@ def validate_transaction_effect(portfolio, asset, transaction_type, quantity, pr
     total_amount = quantity * price_per_unit
 
     if transaction_type == Transaction.TransactionType.DEPOSIT and asset is not None:
-        raise ValidationError('Deposits should not be linked to an asset.')
+        raise ValidationError('تراکنش واریز نباید به دارایی متصل باشد.')
 
     if transaction_type in {
         Transaction.TransactionType.BUY,
         Transaction.TransactionType.SELL,
         Transaction.TransactionType.DIVIDEND,
     } and asset is None:
-        raise ValidationError('Select an asset for buys, sells, and dividends.')
+        raise ValidationError('برای خرید، فروش و سود نقدی باید یک دارایی انتخاب شود.')
 
     if asset is not None and asset.portfolio_id != portfolio.id:
-        raise ValidationError('The selected asset does not belong to this portfolio.')
+        raise ValidationError('دارایی انتخاب شده متعلق به این پرتفوی نیست.')
 
     if transaction_type == Transaction.TransactionType.BUY and portfolio.cash_balance < total_amount:
-        raise ValidationError('This portfolio does not have enough cash for that purchase.')
+        raise ValidationError('موجودی نقدی این پرتفوی برای این خرید کافی نیست.')
 
     if transaction_type == Transaction.TransactionType.SELL and asset.quantity < quantity:
-        raise ValidationError('You cannot sell more units than you currently hold.')
+        raise ValidationError('نمی توانید بیشتر از تعداد دارایی موجود، فروش ثبت کنید.')
 
 
 @db_transaction.atomic

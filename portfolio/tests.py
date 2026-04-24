@@ -101,7 +101,7 @@ class TransactionWorkflowTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'You cannot sell more units than you currently hold.')
+        self.assertContains(response, 'نمی توانید بیشتر از تعداد دارایی موجود، فروش ثبت کنید.')
 
     def test_deposit_transaction_requires_no_asset_and_increases_cash(self):
         self.client.login(username='morgan', password='secret123')
@@ -147,7 +147,7 @@ class PortfolioViewsTests(TestCase):
         self.client.login(username='jamie', password='secret123')
         response = self.client.get(reverse('portfolio:dashboard'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Portfolio overview')
+        self.assertContains(response, 'نمای کلی پرتفوی')
         self.assertContains(response, 'Income Plan')
         self.assertNotContains(response, 'Private Plan')
 
@@ -261,7 +261,7 @@ class PortfolioViewsTests(TestCase):
             reverse('portfolio:transactions'),
             {'portfolio': self.portfolio.pk, 'type': Transaction.TransactionType.DIVIDEND},
         )
-        self.assertContains(response, 'Filtered total')
+        self.assertContains(response, 'جمع فیلتر شده')
         self.assertContains(response, '$12.00')
         self.assertNotContains(response, 'Accumulated shares')
 
@@ -311,8 +311,8 @@ class PortfolioViewsTests(TestCase):
 
         self.client.login(username='jamie', password='secret123')
         response = self.client.get(reverse('portfolio:dashboard'))
-        self.assertContains(response, 'Goal progress')
-        self.assertContains(response, 'Largest positions')
+        self.assertContains(response, 'پیشرفت نسبت به هدف')
+        self.assertContains(response, 'بزرگ ترین موقعیت ها')
         self.assertContains(response, 'KO')
 
     def test_portfolio_holdings_export_returns_csv(self):
@@ -330,7 +330,7 @@ class PortfolioViewsTests(TestCase):
         response = self.client.get(reverse('portfolio:export', args=[self.portfolio.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'text/csv')
-        self.assertContains(response, 'symbol,name,type')
+        self.assertContains(response, 'نماد,نام,نوع')
         self.assertContains(response, 'KO')
 
 

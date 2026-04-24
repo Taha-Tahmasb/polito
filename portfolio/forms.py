@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -18,13 +19,26 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'نام کاربری'
+        self.fields['username'].help_text = 'فقط از حروف، اعداد و @/./+/-/_ استفاده کنید.'
+        self.fields['email'].label = 'ایمیل'
+        self.fields['password1'].label = 'رمز عبور'
+        self.fields['password2'].label = 'تکرار رمز عبور'
+
+
+class PersianAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(label='نام کاربری')
+    password = forms.CharField(label='رمز عبور', strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}))
+
 
 class PortfolioForm(forms.ModelForm):
     class Meta:
         model = Portfolio
         fields = ['name', 'description', 'cash_balance', 'target_return']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 3}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'مثلا استراتژی رشد، درآمدی یا پس انداز بلندمدت'}),
         }
 
 
@@ -35,6 +49,7 @@ class AssetForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['symbol'].help_text = 'نماد بورسی یا شناسه دارایی را وارد کنید.'
         if user is not None:
             self.fields['portfolio'].queryset = Portfolio.objects.filter(owner=user)
 
@@ -45,7 +60,7 @@ class TransactionForm(forms.ModelForm):
         fields = ['portfolio', 'asset', 'transaction_type', 'quantity', 'price_per_unit', 'executed_at', 'notes']
         widgets = {
             'executed_at': DateInput(),
-            'notes': forms.TextInput(attrs={'placeholder': 'Optional note'}),
+            'notes': forms.TextInput(attrs={'placeholder': 'یادداشت اختیاری'}),
         }
 
     def __init__(self, *args, user=None, **kwargs):

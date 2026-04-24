@@ -1,60 +1,60 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Activity | Polito{% endblock %}
+{% block title %}فعالیت ها | Polito{% endblock %}
 
 {% block content %}
 <section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <p class="eyebrow mb-2">Activity log</p>
-        <h1 class="mb-1">Transaction history</h1>
-        <p class="text-muted mb-0">Review every deposit, trade, and dividend across your portfolios.</p>
+        <p class="eyebrow mb-2">گزارش فعالیت</p>
+        <h1 class="mb-1">تاریخچه تراکنش ها</h1>
+        <p class="text-muted mb-0">همه واریزها، خریدها، فروش ها و سودهای نقدی پرتفوی های خود را مرور کنید.</p>
     </div>
     <div class="d-flex gap-2">
-        <a class="btn btn-outline-dark" href="{% url 'portfolio:transactions-export' %}?portfolio={{ selected_portfolio }}&type={{ selected_type }}">Export CSV</a>
-        <a class="btn btn-accent" href="{% url 'portfolio:transaction-create' %}">Log transaction</a>
+        <a class="btn btn-outline-dark" href="{% url 'portfolio:transactions-export' %}?portfolio={{ selected_portfolio }}&type={{ selected_type }}">خروجی CSV</a>
+        <a class="btn btn-accent" href="{% url 'portfolio:transaction-create' %}">ثبت تراکنش</a>
     </div>
 </section>
 
 <section class="panel p-4">
     <form method="get" class="row g-3 align-items-end mb-4">
         <div class="col-md-5">
-            <label class="form-label" for="portfolioFilter">Portfolio</label>
+            <label class="form-label" for="portfolioFilter">پرتفوی</label>
             <select id="portfolioFilter" name="portfolio" class="form-select">
-                <option value="">All portfolios</option>
+                <option value="">همه پرتفوی ها</option>
                 {% for portfolio in filter_portfolios %}
                 <option value="{{ portfolio.pk }}"{% if selected_portfolio == portfolio.pk|stringformat:'s' %} selected{% endif %}>{{ portfolio.name }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-4">
-            <label class="form-label" for="typeFilter">Transaction type</label>
+            <label class="form-label" for="typeFilter">نوع تراکنش</label>
             <select id="typeFilter" name="type" class="form-select">
-                <option value="">All activity</option>
+                <option value="">همه فعالیت ها</option>
                 {% for value, label in transaction_types %}
                 <option value="{{ value }}"{% if selected_type == value %} selected{% endif %}>{{ label }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-3 d-flex gap-2">
-            <button class="btn btn-accent w-100" type="submit">Apply</button>
-            <a class="btn btn-outline-dark w-100" href="{% url 'portfolio:transactions' %}">Reset</a>
+            <button class="btn btn-accent w-100" type="submit">اعمال</button>
+            <a class="btn btn-outline-dark w-100" href="{% url 'portfolio:transactions' %}">پاک کردن</a>
         </div>
     </form>
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <p class="text-muted mb-0">Filtered total: <strong>${{ filtered_total|floatformat:2|intcomma }}</strong></p>
-        <p class="text-muted mb-0">{{ page_obj.paginator.count }} transaction{{ page_obj.paginator.count|pluralize }}</p>
+        <p class="text-muted mb-0">جمع فیلتر شده: <strong>${{ filtered_total|floatformat:2|intcomma }}</strong></p>
+        <p class="text-muted mb-0">{{ page_obj.paginator.count }} تراکنش</p>
     </div>
     <div class="table-responsive">
         <table class="table align-middle">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Portfolio</th>
-                    <th>Asset</th>
-                    <th>Amount</th>
-                    <th>Notes</th>
+                    <th>تاریخ</th>
+                    <th>نوع</th>
+                    <th>پرتفوی</th>
+                    <th>دارایی</th>
+                    <th>مبلغ</th>
+                    <th>یادداشت</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,13 +63,13 @@
                     <td>{{ transaction.executed_at }}</td>
                     <td>{{ transaction.get_transaction_type_display }}</td>
                     <td><a href="{% url 'portfolio:detail' transaction.portfolio.pk %}">{{ transaction.portfolio.name }}</a></td>
-                    <td>{{ transaction.asset.symbol|default:'Cash movement' }}</td>
+                    <td>{{ transaction.asset.symbol|default:'گردش نقدی' }}</td>
                     <td>${{ transaction.total_amount|floatformat:2|intcomma }}</td>
                     <td>{{ transaction.notes|default:'-' }}</td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-muted">No transactions logged yet.</td>
+                    <td colspan="6" class="text-muted">هنوز تراکنشی ثبت نشده است.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -78,13 +78,13 @@
 
     {% if is_paginated %}
     <nav class="d-flex justify-content-between align-items-center pt-3">
-        <span class="text-muted small">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <span class="text-muted small">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>
         <div class="d-flex gap-2">
             {% if page_obj.has_previous %}
-            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.previous_page_number }}">قبلی</a>
             {% endif %}
             {% if page_obj.has_next %}
-            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.next_page_number }}">بعدی</a>
             {% endif %}
         </div>
     </nav>
