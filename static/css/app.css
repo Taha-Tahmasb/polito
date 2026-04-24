@@ -1,0 +1,196 @@
+:root {
+  --bg: #f4efe6;
+  --surface: rgba(255, 255, 255, 0.74);
+  --surface-strong: #fffaf4;
+  --ink: #1b1a17;
+  --muted: #6e6256;
+  --accent: #c2410c;
+  --accent-dark: #9a3412;
+  --line: rgba(27, 26, 23, 0.08);
+  --shadow: 0 18px 40px rgba(86, 63, 38, 0.12);
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(194, 65, 12, 0.16), transparent 25%),
+    linear-gradient(180deg, #f9f5ee 0%, var(--bg) 100%);
+  color: var(--ink);
+  font-family: Tahoma, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="ltr"] body {
+  direction: ltr;
+  text-align: left;
+}
+
+h1, h2, h3, h4, .navbar-brand {
+  font-family: Tahoma, "Segoe UI", sans-serif;
+}
+
+.navbar {
+  background: rgba(249, 245, 238, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-link {
+  color: var(--ink);
+}
+
+.table,
+.form-label,
+form p label {
+  text-align: right;
+}
+
+html[dir="ltr"] .table,
+html[dir="ltr"] .form-label,
+html[dir="ltr"] form p label,
+html[dir="ltr"] form input,
+html[dir="ltr"] form select,
+html[dir="ltr"] form textarea {
+  text-align: left;
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent), #ea580c);
+  border: 0;
+  color: white;
+}
+
+.hero-card,
+.panel,
+.stat-card {
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.hero-card {
+  overflow: hidden;
+}
+
+.eyebrow {
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  padding: 1.25rem;
+}
+
+.stat-card span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.stat-card strong {
+  font-size: 1.5rem;
+}
+
+.transaction-item {
+  align-items: center;
+  background: rgba(255, 250, 244, 0.8);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+}
+
+.progress-card {
+  background: rgba(255, 250, 244, 0.8);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.progress-soft {
+  background: rgba(27, 26, 23, 0.08);
+  border-radius: 999px;
+  height: 0.8rem;
+}
+
+.progress-soft .progress-bar {
+  background: linear-gradient(135deg, var(--accent), #ea580c);
+  border-radius: 999px;
+}
+
+.portfolio-meta {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.portfolio-meta div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.portfolio-meta dt,
+.portfolio-meta dd {
+  margin: 0;
+}
+
+.form-shell {
+  max-width: 780px;
+}
+
+form p {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+form input,
+form select,
+form textarea {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.8rem 0.95rem;
+  text-align: right;
+}
+
+form .helptext,
+form ul.errorlist {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+  padding-right: 1rem;
+}
+
+@media (max-width: 767px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}

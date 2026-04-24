@@ -4,7 +4,9 @@
 
 ### Django Portfolio Management System
 
-A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard.
+### Persian RTL Edition
+
+A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard, now adapted for a Persian RTL experience.
 
 <p>
   <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
@@ -44,6 +46,7 @@ This makes it a strong GitHub project because it demonstrates:
 - relational data modeling
 - analytics and chart rendering
 - CRUD-style workflows
+- exports, onboarding helpers, and deploy-minded configuration
 - test coverage and project structure
 
 ## Features
@@ -62,6 +65,7 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Portfolio Management</h3>
       <ul>
         <li>Create multiple portfolios</li>
+        <li>Edit and remove portfolios safely</li>
         <li>Track cash balance and target return</li>
         <li>View portfolio-level summaries</li>
       </ul>
@@ -72,6 +76,7 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Asset Tracking</h3>
       <ul>
         <li>Add stocks, ETFs, crypto, bonds, and cash</li>
+        <li>Update live positions as holdings change</li>
         <li>Track quantity, average cost, and market price</li>
         <li>Compute value and unrealized P/L</li>
       </ul>
@@ -80,8 +85,11 @@ This makes it a strong GitHub project because it demonstrates:
       <h3>Transactions</h3>
       <ul>
         <li>Record buys, sells, dividends, and deposits</li>
+        <li>Automatically update holdings and cash balances</li>
         <li>Link activity to portfolios and assets</li>
-        <li>Review recent activity from the dashboard</li>
+        <li>Review recent activity from the dashboard and full history page</li>
+        <li>Filter and export transaction history to CSV</li>
+        <li>Export holdings for a single portfolio as CSV</li>
       </ul>
     </td>
   </tr>
@@ -132,6 +140,7 @@ Example section after recording a demo:
 | Charts | Chart.js |
 | Authentication | Django authentication system |
 | Testing | Django test framework |
+| Config | Environment-driven Django settings |
 
 ## Quick Start
 
@@ -168,6 +177,22 @@ Windows:
 pip install -r requirements.txt
 ```
 
+### 4.5) Configure environment variables
+
+Copy the example file and adjust values for your machine or deploy target:
+
+```bash
+cp .env.example .env
+```
+
+Polito reads its Django settings from environment variables such as:
+
+- `DJANGO_SECRET_KEY`
+- `DJANGO_DEBUG`
+- `DJANGO_ALLOWED_HOSTS`
+- `DJANGO_CSRF_TRUSTED_ORIGINS`
+- `DJANGO_SECURE_SSL_REDIRECT`
+
 ### 5) Apply migrations
 
 ```bash
@@ -192,6 +217,21 @@ Then open:
 http://127.0.0.1:8000/
 ```
 
+### Optional: load demo data
+
+If you want a ready-to-browse workspace with sample portfolios and transactions:
+
+```bash
+python manage.py seed_demo_data
+```
+
+Default demo login:
+
+```text
+username: demo
+password: DemoPass123!
+```
+
 ## Routes
 
 | Route | Purpose |
@@ -200,10 +240,16 @@ http://127.0.0.1:8000/
 | `/signup/` | Create an account |
 | `/login/` | Sign in |
 | `/dashboard/` | Main dashboard |
+| `/transactions/` | Full transaction history with filters |
+| `/transactions/export/` | Export filtered transaction history as CSV |
 | `/portfolios/` | Portfolio list |
 | `/portfolios/create/` | Create a portfolio |
 | `/portfolios/<id>/` | Portfolio detail |
+| `/portfolios/<id>/export/` | Export a portfolio's holdings as CSV |
+| `/portfolios/<id>/edit/` | Update a portfolio |
+| `/portfolios/<id>/delete/` | Delete a portfolio |
 | `/assets/create/` | Add an asset |
+| `/assets/<id>/edit/` | Update an asset position |
 | `/transactions/create/` | Log a transaction |
 | `/admin/` | Django admin |
 
@@ -286,9 +332,14 @@ Current automated tests cover:
 
 - portfolio value calculations
 - asset profit calculations
+- transaction application to cash and holdings
+- transaction validation for oversells
 - authentication protection on dashboard views
 - ownership isolation between users
-- authenticated portfolio creation flow
+- authenticated portfolio creation, editing, and activity views
+- transaction filtering and CSV exports
+- portfolio-level holdings exports
+- dashboard insights for goal progress and key holdings
 
 ## GitHub Presentation Tips
 
@@ -301,7 +352,6 @@ To make this repository look even better on GitHub, add:
 
 ## Roadmap
 
-- edit and delete flows for all models
 - REST API with Django REST Framework
 - historical performance snapshots
 - real market price integration

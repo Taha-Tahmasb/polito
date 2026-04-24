@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}Create account | Polito{% endblock %}
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}ایجاد حساب{% else %}Create account{% endif %} | Polito{% endblock %}
 
 {% block content %}
 <section class="form-shell mx-auto auth-shell">
     <div class="mb-4 text-center">
-        <p class="eyebrow mb-2">Get started</p>
-        <h1 class="mb-2">Create your Polito account</h1>
-        <p class="text-muted mb-0">Set up a user account first, then create portfolios that belong to you.</p>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}شروع کنید{% else %}Get started{% endif %}</p>
+        <h1 class="mb-2">{% if LANGUAGE_CODE == 'fa' %}حساب Polito خود را بسازید{% else %}Create your Polito account{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}ابتدا حساب کاربری خود را بسازید و سپس پرتفوی های شخصی خودتان را مدیریت کنید.{% else %}Set up your account first, then create the portfolios that belong to you.{% endif %}</p>
     </div>
     <div class="panel p-4 p-lg-5">
         <form method="post" class="vstack gap-3">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-accent">Create account</button>
+            <button type="submit" class="btn btn-accent">{% if LANGUAGE_CODE == 'fa' %}ایجاد حساب{% else %}Create account{% endif %}</button>
         </form>
-        <p class="text-muted mt-4 mb-0">Already registered? <a href="{% url 'portfolio:login' %}">Log in</a>.</p>
+        <p class="text-muted mt-4 mb-0">{% if LANGUAGE_CODE == 'fa' %}قبلا ثبت نام کرده اید؟ <a href="{% url 'portfolio:login' %}">ورود</a>.{% else %}Already registered? <a href="{% url 'portfolio:login' %}">Log in</a>.{% endif %}</p>
     </div>
 </section>
 {% endblock %}

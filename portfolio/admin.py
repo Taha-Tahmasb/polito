@@ -6,7 +6,7 @@ from .models import Asset, Portfolio, Transaction
 @admin.register(Portfolio)
 class PortfolioAdmin(admin.ModelAdmin):
     list_display = ('name', 'owner', 'cash_balance', 'target_return', 'updated_at')
-    search_fields = ('name', 'owner')
+    search_fields = ('name', 'owner__username')
 
 
 @admin.register(Asset)

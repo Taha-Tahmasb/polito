@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{% if LANGUAGE_CODE == 'fa' %}فعالیت ها{% else %}Activity{% endif %} | Polito{% endblock %}
+
+{% block content %}
+<section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <p class="eyebrow mb-2">{% if LANGUAGE_CODE == 'fa' %}گزارش فعالیت{% else %}Activity log{% endif %}</p>
+        <h1 class="mb-1">{% if LANGUAGE_CODE == 'fa' %}تاریخچه تراکنش ها{% else %}Transaction history{% endif %}</h1>
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}همه واریزها، خریدها، فروش ها و سودهای نقدی پرتفوی های خود را مرور کنید.{% else %}Review every deposit, trade, and dividend across your portfolios.{% endif %}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-dark" href="{% url 'portfolio:transactions-export' %}?portfolio={{ selected_portfolio }}&type={{ selected_type }}">{% if LANGUAGE_CODE == 'fa' %}خروجی CSV{% else %}Export CSV{% endif %}</a>
+        <a class="btn btn-accent" href="{% url 'portfolio:transaction-create' %}">{% if LANGUAGE_CODE == 'fa' %}ثبت تراکنش{% else %}Log transaction{% endif %}</a>
+    </div>
+</section>
+
+<section class="panel p-4">
+    <form method="get" class="row g-3 align-items-end mb-4">
+        <div class="col-md-5">
+            <label class="form-label" for="portfolioFilter">{% if LANGUAGE_CODE == 'fa' %}پرتفوی{% else %}Portfolio{% endif %}</label>
+            <select id="portfolioFilter" name="portfolio" class="form-select">
+                <option value="">{% if LANGUAGE_CODE == 'fa' %}همه پرتفوی ها{% else %}All portfolios{% endif %}</option>
+                {% for portfolio in filter_portfolios %}
+                <option value="{{ portfolio.pk }}"{% if selected_portfolio == portfolio.pk|stringformat:'s' %} selected{% endif %}>{{ portfolio.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="typeFilter">{% if LANGUAGE_CODE == 'fa' %}نوع تراکنش{% else %}Transaction type{% endif %}</label>
+            <select id="typeFilter" name="type" class="form-select">
+                <option value="">{% if LANGUAGE_CODE == 'fa' %}همه فعالیت ها{% else %}All activity{% endif %}</option>
+                {% for value, label in transaction_types %}
+                <option value="{{ value }}"{% if selected_type == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-accent w-100" type="submit">{% if LANGUAGE_CODE == 'fa' %}اعمال{% else %}Apply{% endif %}</button>
+            <a class="btn btn-outline-dark w-100" href="{% url 'portfolio:transactions' %}">{% if LANGUAGE_CODE == 'fa' %}پاک کردن{% else %}Reset{% endif %}</a>
+        </div>
+    </form>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <p class="text-muted mb-0">{% if LANGUAGE_CODE == 'fa' %}جمع فیلتر شده{% else %}Filtered total{% endif %}: <strong>${{ filtered_total|floatformat:2|intcomma }}</strong></p>
+        <p class="text-muted mb-0">{{ page_obj.paginator.count }} {% if LANGUAGE_CODE == 'fa' %}تراکنش{% else %}transactions{% endif %}</p>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}تاریخ{% else %}Date{% endif %}</th>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}نوع{% else %}Type{% endif %}</th>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}پرتفوی{% else %}Portfolio{% endif %}</th>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}دارایی{% else %}Asset{% endif %}</th>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}مبلغ{% else %}Amount{% endif %}</th>
+                    <th>{% if LANGUAGE_CODE == 'fa' %}یادداشت{% else %}Notes{% endif %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.executed_at }}</td>
+                    <td>{{ transaction.get_transaction_type_display }}</td>
+                    <td><a href="{% url 'portfolio:detail' transaction.portfolio.pk %}">{{ transaction.portfolio.name }}</a></td>
+                    <td>{{ transaction.asset.symbol|default:cash_movement_label }}</td>
+                    <td>${{ transaction.total_amount|floatformat:2|intcomma }}</td>
+                    <td>{{ transaction.notes|default:'-' }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-muted">{% if LANGUAGE_CODE == 'fa' %}هنوز تراکنشی ثبت نشده است.{% else %}No transactions logged yet.{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <nav class="d-flex justify-content-between align-items-center pt-3">
+        <span class="text-muted small">{% if LANGUAGE_CODE == 'fa' %}صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}{% else %}Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}{% endif %}</span>
+        <div class="d-flex gap-2">
+            {% if page_obj.has_previous %}
+            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.previous_page_number }}">{% if LANGUAGE_CODE == 'fa' %}قبلی{% else %}Previous{% endif %}</a>
+            {% endif %}
+            {% if page_obj.has_next %}
+            <a class="btn btn-outline-dark btn-sm" href="?page={{ page_obj.next_page_number }}">{% if LANGUAGE_CODE == 'fa' %}بعدی{% else %}Next{% endif %}</a>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
+</section>
+{% endblock %}
