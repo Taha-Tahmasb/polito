@@ -1,453 +1,319 @@
-<div align=“center”>
+<div align="center">
 
-💼 Polito
-Portfolio Management System
-A modern platform for managing and analyzing investment portfolios.
+# Polito
 
+### Django Portfolio Management System
 
+A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard.
 
+<p>
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Django-4.2-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
+  <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
+  <img src="https://img.shields.io/badge/Chart.js-Analytics-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js">
+  <img src="https://img.shields.io/badge/Status-Active-198754?style=for-the-badge" alt="Status">
+</p>
 
-
-
-
-
+<p>
+  <a href="#features">Features</a> •
+  <a href="#screenshots">Screenshots</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#routes">Routes</a> •
+  <a href="#project-structure">Structure</a>
+</p>
 
 </div>
 
-📖 About
-Polito is a portfolio management system built with Django that allows users to manage financial assets, track transactions, and analyze investment performance.
+---
 
-The project is designed with a clean architecture, modular Django apps, and scalable backend structure, making it suitable both as a real application and as a professional backend portfolio project.
+## Overview
 
-✨ Features
-User Management
-Secure authentication system
-User profile management
-Activity tracking
-Portfolio Management
-Create and manage multiple portfolios
-Categorize and organize assets
-Portfolio value calculation
-Asset Tracking
-Support for multiple asset types
-Buy and sell transaction records
-Profit and loss calculations
-Analytics
-Portfolio performance analysis
-Visual charts and statistics
-Historical performance tracking
-API Support
-RESTful API built with Django REST Framework
-Designed for integration with external services or frontend applications
-🛠 Tech Stack
-Backend
-Django
-Django REST Framework
-PostgreSQL
-Celery
-Redis
-Frontend
-HTML
-CSS
-JavaScript
-Bootstrap
-Chart.js
-DevOps & Tools
-Docker
-Docker Compose
-GitHub Actions
-Gunicorn
-Nginx
-Pytest
-🚀 Installation
-Prerequisites
-Python 3.11+
-PostgreSQL
-Redis
-Git
-1. Clone the Repository
-git clone https://github.com/Taha-Tahmasb/polito.git
+Polito is a Django-based portfolio management platform designed for learning, showcasing, and extending into a more complete financial product.
 
+It lets each authenticated user manage their own:
+
+- portfolios
+- holdings
+- transactions
+- dashboard analytics
+
+This makes it a strong GitHub project because it demonstrates:
+
+- authentication and authorization
+- relational data modeling
+- analytics and chart rendering
+- CRUD-style workflows
+- test coverage and project structure
+
+## Features
+
+<table>
+  <tr>
+    <td width="50%">
+      <h3>Authentication</h3>
+      <ul>
+        <li>Sign up, log in, and log out</li>
+        <li>Protected pages with Django auth</li>
+        <li>User-specific data isolation</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>Portfolio Management</h3>
+      <ul>
+        <li>Create multiple portfolios</li>
+        <li>Track cash balance and target return</li>
+        <li>View portfolio-level summaries</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>Asset Tracking</h3>
+      <ul>
+        <li>Add stocks, ETFs, crypto, bonds, and cash</li>
+        <li>Track quantity, average cost, and market price</li>
+        <li>Compute value and unrealized P/L</li>
+      </ul>
+    </td>
+    <td>
+      <h3>Transactions</h3>
+      <ul>
+        <li>Record buys, sells, dividends, and deposits</li>
+        <li>Link activity to portfolios and assets</li>
+        <li>Review recent activity from the dashboard</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+## Screenshots
+
+> Replace these placeholders with real screenshots after pushing the project.
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/images/dashboard-placeholder.svg" alt="Dashboard screenshot" width="100%">
+      <br>
+      <sub>Dashboard overview</sub>
+    </td>
+    <td align="center">
+      <img src="docs/images/portfolio-placeholder.svg" alt="Portfolio detail screenshot" width="100%">
+      <br>
+      <sub>Portfolio detail</sub>
+    </td>
+  </tr>
+</table>
+
+## Demo
+
+You can also add a short GIF here later:
+
+```text
+docs/images/polito-demo.gif
+```
+
+Example section after recording a demo:
+
+```md
+## Demo
+
+![Polito Demo](docs/images/polito-demo.gif)
+```
+
+## Tech Stack
+
+| Layer | Tools |
+| --- | --- |
+| Backend | Python, Django 4.2 |
+| Database | SQLite for local development |
+| Frontend | HTML, Bootstrap 5, custom CSS |
+| Charts | Chart.js |
+| Authentication | Django authentication system |
+| Testing | Django test framework |
+
+## Quick Start
+
+### 1) Clone the project
+
+```bash
+git clone <your-repo-url>
 cd polito
+```
 
-2. Create Virtual Environment
-python -m venv venv
+### 2) Create a virtual environment
 
-Activate it:
+```bash
+python -m venv .venv
+```
 
-Linux / Mac:
+### 3) Activate it
 
-source venv/bin/activate
+macOS / Linux:
+
+```bash
+source .venv/bin/activate
+```
 
 Windows:
 
-venv\Scripts\activate
+```bash
+.venv\Scripts\activate
+```
 
-3. Install Dependencies
+### 4) Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-4. Environment Configuration
-Create environment file:
+### 5) Apply migrations
 
-cp .env.example .env
-
-Edit .env and configure variables such as:
-
-SECRET_KEY=
-
-DEBUG=
-
-DATABASE_URL=
-
-REDIS_URL=
-
-5. Apply Migrations
+```bash
 python manage.py migrate
+```
 
-6. Create Admin User
+### 6) Create a superuser
+
+```bash
 python manage.py createsuperuser
+```
 
-7. Run Development Server
+### 7) Run the development server
+
+```bash
 python manage.py runserver
+```
 
-Application will be available at: http://127.0.0.1:8000
+Then open:
 
-🐳 Running with Docker
-docker-compose up --build
+```text
+http://127.0.0.1:8000/
+```
 
-Run migrations:
+## Routes
 
-docker-compose exec web python manage.py migrate
+| Route | Purpose |
+| --- | --- |
+| `/` | Redirects to login or dashboard |
+| `/signup/` | Create an account |
+| `/login/` | Sign in |
+| `/dashboard/` | Main dashboard |
+| `/portfolios/` | Portfolio list |
+| `/portfolios/create/` | Create a portfolio |
+| `/portfolios/<id>/` | Portfolio detail |
+| `/assets/create/` | Add an asset |
+| `/transactions/create/` | Log a transaction |
+| `/admin/` | Django admin |
 
-Create superuser:
+## Data Model
 
-docker-compose exec web python manage.py createsuperuser
+### Portfolio
+A user-owned investment account or strategy bucket.
 
-📁 Project Structure
+**Fields**
+- `owner`
+- `name`
+- `description`
+- `cash_balance`
+- `target_return`
+- `created_at`
+- `updated_at`
+
+**Computed values**
+- `invested_amount`
+- `holdings_value`
+- `total_value`
+- `unrealized_profit`
+
+### Asset
+A holding inside a portfolio.
+
+**Fields**
+- `portfolio`
+- `symbol`
+- `name`
+- `asset_type`
+- `quantity`
+- `average_cost`
+- `current_price`
+- `updated_at`
+
+**Computed values**
+- `cost_basis`
+- `market_value`
+- `pnl`
+- `pnl_percent`
+
+### Transaction
+A trading or cash-flow event.
+
+**Fields**
+- `portfolio`
+- `asset`
+- `transaction_type`
+- `quantity`
+- `price_per_unit`
+- `notes`
+- `executed_at`
+- `created_at`
+
+**Computed value**
+- `total_amount`
+
+## Project Structure
+
+```text
 polito/
-
-├── config/ # Django project configuration
-
-│ ├── settings/
-
-│ ├── urls.py
-
-│ └── wsgi.py
-
-├── apps/
-
-│ ├── accounts/ # Authentication and users
-
-│ ├── portfolio/ # Portfolio management
-
-│ ├── analytics/ # Performance analytics
-
-│ └── market/ # Market data services
-
-├── templates/ # HTML templates
-
-├── static/ # Static files
-
-├── media/ # Uploaded files
-
-├── requirements.txt
-
+├── config/                  # Project settings and root URLs
+├── portfolio/               # Core app: models, views, forms, tests, admin
+├── portfolio/migrations/    # Database migrations
+├── static/                  # CSS and local vendor assets
+├── templates/               # Shared, portfolio, and auth templates
 ├── manage.py
-
+├── requirements.txt
 └── README.md
+```
 
-📚 API Documentation
-API endpoints are built using Django REST Framework.
+## Running Tests
 
-Example endpoints:
+```bash
+python manage.py test
+```
 
-/api/portfolios/
+Current automated tests cover:
 
-/api/assets/
+- portfolio value calculations
+- asset profit calculations
+- authentication protection on dashboard views
+- ownership isolation between users
+- authenticated portfolio creation flow
 
-/api/transactions/
+## GitHub Presentation Tips
 
-Authentication is required for protected endpoints.
+To make this repository look even better on GitHub, add:
 
-🤝 Contributing
-Fork the repository
-Create a new branch: git checkout -b feature/your-feature
-Commit your changes: git commit -m “Add new feature”
-Push the branch: git push origin feature/your-feature
-Open a Pull Request
-📝 License
-MIT License
+- real screenshots inside `docs/images/`
+- one short demo GIF
+- a deployed demo URL if you host it later
+- a `LICENSE` file if you want the badge and license section to be fully accurate
 
-👨‍💻 Author
-Taha Tahmasb
+## Roadmap
 
-GitHub: https://github.com/Taha-Tahmasb
+- edit and delete flows for all models
+- REST API with Django REST Framework
+- historical performance snapshots
+- real market price integration
+- PostgreSQL production setup
+- Celery jobs for background updates
 
-Projec
+## License
 
-ساده‌ترین روش: یک دستور اجرا کن و بعد متن را یکجا پیست کن.
+This project is available under the MIT License.
 
-دستور ساخت فایل:
+---
 
-nano README.md
-
-کل متن زیر را کامل کپی و داخل nano پیست کن:
-
-<div align=“center”>
-
-Polito
-Portfolio Management System
-A modern platform for managing and analyzing investment portfolios.
-
+<div align="center">
+  Built with Django for learning, showcasing, and growing into a real product.
 </div>
-
-About
-Polito is a portfolio management system built with Django that allows users to manage financial assets, track transactions, and analyze investment performance.
-
-The project uses a clean architecture and modular Django apps to keep the backend scalable and maintainable.
-
-Features
-User Management
-
-Secure authentication
-User profiles
-Activity tracking
-Portfolio Management
-
-Multiple portfolios
-Asset categorization
-Portfolio value calculation
-Asset Tracking
-
-Buy and sell transactions
-Multiple asset types
-Profit and loss calculation
-Analytics
-
-Portfolio performance tracking
-Charts and statistics
-API
-
-REST API using Django REST Framework
-Tech Stack
-Backend
-
-Django
-Django REST Framework
-PostgreSQL
-Redis
-Celery
-Frontend
-
-HTML
-CSS
-JavaScript
-Bootstrap
-Chart.js
-DevOps
-
-Docker
-Docker Compose
-Gunicorn
-Nginx
-GitHub Actions
-Installation
-Requirements
-
-Python 3.11+
-PostgreSQL
-Redis
-Git
-:::writing
-
-<div align=“center”>
-
-Polito
-Portfolio Management System
-A modern platform for managing and analyzing investment portfolios.
-
-</div>
-
-About
-Polito is a portfolio management system built with Django that allows users to manage financial assets, track transactions, and analyze investment performance.
-
-The project is designed with a clean architecture and modular Django applications so the backend remains scalable, maintainable, and production‑ready.
-
-Features
-User Management
-Secure authentication system
-User profile management
-Activity tracking
-Portfolio Management
-Create and manage multiple portfolios
-Organize and categorize assets
-Automatic portfolio value calculation
-Asset Tracking
-Support for multiple asset types
-Buy and sell transaction records
-Profit and loss calculation
-Analytics
-Portfolio performance analysis
-Charts and statistics
-Historical performance tracking
-API
-RESTful API using Django REST Framework
-Ready for integration with external frontends or services
-Tech Stack
-Backend
-Django
-Django REST Framework
-PostgreSQL
-Redis
-Celery
-Frontend
-HTML
-CSS
-JavaScript
-Bootstrap
-Chart.js
-DevOps
-Docker
-Docker Compose
-Gunicorn
-Nginx
-GitHub Actions
-Installation
-Requirements
-Python 3.11+
-PostgreSQL
-Redis
-Git
-Clone the repository
-git clone https://github.com/Taha-Tahmasb/polito.git
-
-cd polito
-
-Create virtual environment
-python -m venv venv
-
-Activate environment
-
-Linux / Mac
-
-source venv/bin/activate
-
-Windows
-
-venv\Scripts\activate
-
-Install dependencies
-pip install -r requirements.txt
-
-Environment configuration
-Create environment file
-
-cp .env.example .env
-
-Edit the .env file and configure variables:
-
-SECRET_KEY=
-
-DEBUG=
-
-DATABASE_URL=
-
-REDIS_URL=
-
-Apply database migrations
-python manage.py migrate
-
-Create admin user
-python manage.py createsuperuser
-
-Run development server
-python manage.py runserver
-
-Application will be available at:
-
-http://127.0.0.1:8000
-
-Docker
-Run the project with Docker:
-
-docker-compose up --build
-
-Run migrations:
-
-docker-compose exec web python manage.py migrate
-
-Create superuser:
-
-docker-compose exec web python manage.py createsuperuser
-
-Project Structure
-polito/
-
-config/
-
-settings/
-
-urls.py
-
-wsgi.py
-
-apps/
-
-accounts/
-
-portfolio/
-
-analytics/
-
-market/
-
-templates/
-
-static/
-
-media/
-
-requirements.txt
-
-manage.py
-
-README.md
-
-API Endpoints
-Example endpoints:
-
-/api/portfolios/
-
-/api/assets/
-
-/api/transactions/
-
-Authentication is required for protected endpoints.
-
-Contributing
-Fork the repository
-Create a branch
-git checkout -b feature/your-feature
-
-Commit changes
-git commit -m “Add new feature”
-
-Push branch
-git push origin feature/your-feature
-
-Open a Pull Request
-License
-MIT License
-
-Author
-Taha Tahmasb
-
-GitHub:
-
-https://github.com/Taha-Tahmasb
-
-Project Repository:
-
-https://github.com/Taha-Tahmasb/polito
-
-:::

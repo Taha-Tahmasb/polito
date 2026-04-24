@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Portfolios | Polito{% endblock %}
+
+{% block content %}
+<section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <p class="eyebrow mb-2">Portfolio book</p>
+        <h1 class="mb-1">All portfolios</h1>
+        <p class="text-muted mb-0">Review every strategy, balance, and target tied to your account.</p>
+    </div>
+    <a class="btn btn-accent" href="{% url 'portfolio:create' %}">Create portfolio</a>
+</section>
+
+<div class="row g-4">
+    {% for portfolio in portfolios %}
+    <div class="col-md-6 col-xl-4">
+        <article class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h2 class="h4 mb-1"><a class="text-decoration-none" href="{% url 'portfolio:detail' portfolio.pk %}">{{ portfolio.name }}</a></h2>
+                    <p class="text-muted mb-0">{{ request.user.username }}</p>
+                </div>
+                <span class="badge text-bg-light">{{ portfolio.assets.count }} assets</span>
+            </div>
+            <p class="text-muted">{{ portfolio.description|default:'No description added yet.' }}</p>
+            <dl class="mb-0 small portfolio-meta">
+                <div><dt>Total value</dt><dd>${{ portfolio.total_value|floatformat:2|intcomma }}</dd></div>
+                <div><dt>Cash balance</dt><dd>${{ portfolio.cash_balance|floatformat:2|intcomma }}</dd></div>
+                <div><dt>Target return</dt><dd>{{ portfolio.target_return }}%</dd></div>
+            </dl>
+        </article>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="panel p-5 text-center">
+            <h2 class="h3">No portfolios yet</h2>
+            <p class="text-muted">Start by creating a portfolio and then add assets and transactions.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

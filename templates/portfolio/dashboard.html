@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Dashboard | Polito{% endblock %}
+
+{% block content %}
+<section class="hero-card p-4 p-lg-5 mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <p class="eyebrow mb-2">Portfolio overview</p>
+            <h1 class="display-5 mb-3">Welcome back, {{ request.user.username }}. Manage your assets and performance in one place.</h1>
+            <p class="lead text-muted mb-4">Track positions, understand allocation, and keep every portfolio decision visible inside your own authenticated workspace.</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-accent btn-lg" href="{% url 'portfolio:create' %}">Create portfolio</a>
+                <a class="btn btn-outline-dark btn-lg" href="{% url 'portfolio:transaction-create' %}">Log transaction</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="stat-grid">
+                <article class="stat-card">
+                    <span>Total value</span>
+                    <strong>${{ total_value|floatformat:2|intcomma }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Unrealized P/L</span>
+                    <strong>${{ total_profit|floatformat:2|intcomma }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Portfolios</span>
+                    <strong>{{ portfolio_count }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Assets tracked</span>
+                    <strong>{{ asset_count }}</strong>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Portfolio mix</h2>
+                <span class="text-muted">Your accounts</span>
+            </div>
+            <canvas id="portfolioMixChart" height="200"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Asset allocation</h2>
+                <span class="text-muted">By type</span>
+            </div>
+            <canvas id="allocationChart" height="200"></canvas>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-lg-7">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Your portfolios</h2>
+                <a href="{% url 'portfolio:list' %}" class="text-decoration-none">View all</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Total value</th>
+                            <th>Invested</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for portfolio in portfolio_rows %}
+                        <tr>
+                            <td><a href="{% url 'portfolio:detail' portfolio.id %}">{{ portfolio.name }}</a></td>
+                            <td>${{ portfolio.total_value|floatformat:2|intcomma }}</td>
+                            <td>${{ portfolio.invested_amount|floatformat:2|intcomma }}</td>
+                            <td>{{ portfolio.target_return }}%</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-muted">No portfolios yet. Create your first one to get started.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Recent transactions</h2>
+                <a href="{% url 'portfolio:transaction-create' %}" class="text-decoration-none">Add new</a>
+            </div>
+            <div class="vstack gap-3">
+                {% for transaction in recent_transactions %}
+                <article class="transaction-item">
+                    <div>
+                        <strong>{{ transaction.get_transaction_type_display }}</strong>
+                        <div class="text-muted small">{{ transaction.portfolio.name }}{% if transaction.asset %} - {{ transaction.asset.symbol }}{% endif %}</div>
+                    </div>
+                    <div class="text-end">
+                        <div>${{ transaction.total_amount|floatformat:2|intcomma }}</div>
+                        <div class="text-muted small">{{ transaction.executed_at }}</div>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">No transactions logged yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const portfolioMixCtx = document.getElementById('portfolioMixChart');
+const allocationCtx = document.getElementById('allocationChart');
+
+if (portfolioMixCtx && {{ portfolio_mix_values|safe }}.length) {
+  new Chart(portfolioMixCtx, {
+    type: 'bar',
+    data: {
+      labels: {{ portfolio_mix_labels|safe }},
+      datasets: [{
+        label: 'Portfolio value',
+        data: {{ portfolio_mix_values|safe }},
+        borderRadius: 12,
+        backgroundColor: ['#0f766e', '#f97316', '#dc2626', '#ca8a04', '#2563eb']
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
+if (allocationCtx && {{ allocation_values|safe }}.length) {
+  new Chart(allocationCtx, {
+    type: 'doughnut',
+    data: {
+      labels: {{ allocation_labels|safe }},
+      datasets: [{
+        data: {{ allocation_values|safe }},
+        backgroundColor: ['#0f766e', '#f97316', '#dc2626', '#ca8a04', '#2563eb']
+      }]
+    }
+  });
+}
+</script>
+{% endblock %}

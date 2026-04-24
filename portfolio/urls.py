@@ -1,0 +1,29 @@
+from django.urls import path
+
+from .views import (
+    AssetCreateView,
+    DashboardView,
+    PortfolioCreateView,
+    PortfolioDetailView,
+    PortfolioListView,
+    SignUpView,
+    TransactionCreateView,
+    UserLoginView,
+    UserLogoutView,
+    home_redirect,
+)
+
+app_name = 'portfolio'
+
+urlpatterns = [
+    path('', home_redirect, name='home'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', UserLogoutView.as_view(), name='logout'),
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('portfolios/', PortfolioListView.as_view(), name='list'),
+    path('portfolios/create/', PortfolioCreateView.as_view(), name='create'),
+    path('portfolios/<int:pk>/', PortfolioDetailView.as_view(), name='detail'),
+    path('assets/create/', AssetCreateView.as_view(), name='asset-create'),
+    path('transactions/create/', TransactionCreateView.as_view(), name='transaction-create'),
+]
