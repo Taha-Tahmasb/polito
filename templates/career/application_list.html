@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Applications | Polito{% endblock %}
+
+{% block content %}
+<section class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <p class="eyebrow mb-2">Application tracker</p>
+        <h1 class="mb-1">Job search pipeline</h1>
+        <p class="text-muted mb-0">Filter opportunities, update statuses, and keep your next action obvious.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-dark" href="{% url 'career:company-create' %}">Add company</a>
+        <a class="btn btn-accent" href="{% url 'career:application-create' %}">Track application</a>
+    </div>
+</section>
+
+<section class="panel p-4">
+    <form method="get" class="row g-3 align-items-end mb-4">
+        <div class="col-md-5">
+            <label class="form-label" for="q">Search</label>
+            <input id="q" class="form-control" type="search" name="q" value="{{ search_query }}" placeholder="Role or company">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="status">Status</label>
+            <select id="status" class="form-select" name="status">
+                <option value="">All statuses</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}"{% if selected_status == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-accent w-100" type="submit">Apply</button>
+            <a class="btn btn-outline-dark w-100" href="{% url 'career:applications' %}">Reset</a>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Follow-up</th>
+                    <th>Next step</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr class="{% if application.needs_follow_up %}table-warning{% endif %}">
+                    <td><strong>{{ application.role }}</strong><div class="small text-muted">{{ application.source|default:'Source not set' }}</div></td>
+                    <td>{{ application.company.name }}</td>
+                    <td><span class="badge text-bg-light">{{ application.get_status_display }}</span></td>
+                    <td>{{ application.follow_up_on|default:'-' }}</td>
+                    <td>{{ application.next_step|default:'-' }}</td>
+                    <td class="text-end">
+                        <a class="small text-decoration-none" href="{% url 'career:application-edit' application.pk %}">Edit</a>
+                        <span class="text-muted">/</span>
+                        <a class="small text-decoration-none text-danger" href="{% url 'career:application-delete' application.pk %}">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-muted">No applications match your filters.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

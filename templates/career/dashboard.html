@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Career Hub | Polito{% endblock %}
+
+{% block content %}
+<section class="hero-card p-4 p-lg-5 mb-4 career-hero">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <p class="eyebrow mb-2">Career command center</p>
+            <h1 class="display-5 mb-3">Turn the first-job search into a clean, measurable pipeline.</h1>
+            <p class="lead text-muted mb-4">Track target companies, applications, contacts, follow-ups, and next steps with the same discipline as a product dashboard.</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-accent btn-lg" href="{% url 'career:application-create' %}">Track application</a>
+                <a class="btn btn-outline-dark btn-lg" href="{% url 'career:company-create' %}">Add company</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="stat-grid">
+                <article class="stat-card"><span>Total applications</span><strong>{{ total_applications }}</strong></article>
+                <article class="stat-card"><span>Active pipeline</span><strong>{{ active_applications }}</strong></article>
+                <article class="stat-card"><span>Interviews</span><strong>{{ interview_count }}</strong></article>
+                <article class="stat-card"><span>Offers</span><strong>{{ offer_count }}</strong></article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-lg-7">
+        <div class="panel p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 mb-0">Recent opportunities</h2>
+                <a class="text-decoration-none" href="{% url 'career:applications' %}">View all</a>
+            </div>
+            <div class="vstack gap-3">
+                {% for application in recent_applications %}
+                <article class="transaction-item application-row {% if application.needs_follow_up %}needs-follow-up{% endif %}">
+                    <div>
+                        <strong>{{ application.role }}</strong>
+                        <div class="text-muted small">{{ application.company.name }}{% if application.location %} - {{ application.location }}{% endif %}</div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge text-bg-light">{{ application.get_status_display }}</span>
+                        <div class="small text-muted">{{ application.days_since_applied }} days open</div>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">No applications yet. Add a company and start tracking your first opportunity.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel p-4 h-100">
+            <h2 class="h4 mb-3">Follow-up radar</h2>
+            <div class="vstack gap-3 mb-4">
+                {% for application in follow_ups %}
+                <article class="transaction-item {% if application.needs_follow_up %}needs-follow-up{% endif %}">
+                    <div>
+                        <strong>{{ application.company.name }}</strong>
+                        <div class="text-muted small">{{ application.next_step|default:'No next step recorded' }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div>{{ application.follow_up_on }}</div>
+                        <a class="small text-decoration-none" href="{% url 'career:application-edit' application.pk %}">Update</a>
+                    </div>
+                </article>
+                {% empty %}
+                <p class="text-muted mb-0">Add follow-up dates so no recruiter conversation goes cold.</p>
+                {% endfor %}
+            </div>
+            <h2 class="h4 mb-3">Pipeline status</h2>
+            <div class="vstack gap-2">
+                {% for row in status_rows %}
+                <div class="d-flex justify-content-between border-bottom py-2">
+                    <span>{{ row.status|title }}</span>
+                    <strong>{{ row.total }}</strong>
+                </div>
+                {% empty %}
+                <p class="text-muted mb-0">Your status breakdown appears after the first application.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

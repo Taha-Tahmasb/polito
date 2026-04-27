@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ form_title }} | Polito{% endblock %}
+
+{% block content %}
+<section class="form-shell mx-auto">
+    <div class="mb-4 text-center">
+        <p class="eyebrow mb-2">Career workflow</p>
+        <h1 class="mb-2">{{ form_title }}</h1>
+        <p class="text-muted mb-0">{{ form_hint }}</p>
+    </div>
+    <div class="panel p-4 p-lg-5">
+        {% if empty_company_cta %}
+        <div class="alert alert-info">Create a company first, then return here to track the application.</div>
+        <a class="btn btn-outline-dark mb-4" href="{% url 'career:company-create' %}">Add company</a>
+        {% endif %}
+        <form method="post" class="vstack gap-3">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-accent">Save</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

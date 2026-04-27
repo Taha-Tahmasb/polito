@@ -83,6 +83,12 @@ html[dir="ltr"] form textarea {
   overflow: hidden;
 }
 
+.career-hero {
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.18), rgba(255, 250, 244, 0.82)),
+    var(--surface);
+}
+
 .eyebrow {
   color: var(--accent-dark);
   font-size: 0.85rem;
@@ -119,6 +125,15 @@ html[dir="ltr"] form textarea {
   display: flex;
   justify-content: space-between;
   padding: 0.9rem 1rem;
+}
+
+.application-row {
+  position: relative;
+}
+
+.needs-follow-up {
+  border-color: rgba(194, 65, 12, 0.35);
+  box-shadow: 0 12px 28px rgba(194, 65, 12, 0.08);
 }
 
 .progress-card {

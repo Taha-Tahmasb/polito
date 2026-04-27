@@ -17,6 +17,7 @@
                     <a class="nav-link" href="{% url 'portfolio:dashboard' %}">{% if LANGUAGE_CODE == 'fa' %}داشبورد{% else %}Dashboard{% endif %}</a>
                     <a class="nav-link" href="{% url 'portfolio:list' %}">{% if LANGUAGE_CODE == 'fa' %}پرتفوی ها{% else %}Portfolios{% endif %}</a>
                     <a class="nav-link" href="{% url 'portfolio:transactions' %}">{% if LANGUAGE_CODE == 'fa' %}فعالیت ها{% else %}Activity{% endif %}</a>
+                    <a class="nav-link" href="{% url 'career:dashboard' %}">{% if LANGUAGE_CODE == 'fa' %}کاریابی{% else %}Career{% endif %}</a>
                     <span class="nav-link text-muted small">{{ request.user.username }}</span>
                     <form method="post" action="/i18n/setlang/" class="d-inline-flex">
                         {% csrf_token %}
