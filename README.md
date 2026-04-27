@@ -6,11 +6,11 @@
 
 ### Persian RTL Edition
 
-A polished portfolio tracking app built with Django for managing portfolios, holdings, and transactions in a secure user-based dashboard, now adapted for a Persian RTL experience.
+A polished Django workspace for portfolio tracking and first-job search organization, with secure user dashboards and a Persian RTL experience.
 
 <p>
   <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Django-4.2-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
+  <img src="https://img.shields.io/badge/Django-5.2-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
   <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
   <img src="https://img.shields.io/badge/Chart.js-Analytics-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js">
   <img src="https://img.shields.io/badge/Status-Active-198754?style=for-the-badge" alt="Status">
@@ -31,7 +31,7 @@ A polished portfolio tracking app built with Django for managing portfolios, hol
 
 ## Overview
 
-Polito is a Django-based portfolio management platform designed for learning, showcasing, and extending into a more complete financial product.
+Polito is a Django-based portfolio management platform designed for learning, showcasing, and extending into a more complete financial product. It now also includes a Career Hub app that helps first-job seekers track companies, applications, statuses, and follow-ups.
 
 It lets each authenticated user manage their own:
 
@@ -47,6 +47,7 @@ This makes it a strong GitHub project because it demonstrates:
 - analytics and chart rendering
 - CRUD-style workflows
 - exports, onboarding helpers, and deploy-minded configuration
+- a second Django app with a job-application pipeline use case
 - test coverage and project structure
 
 ## Features
@@ -95,6 +96,16 @@ This makes it a strong GitHub project because it demonstrates:
   </tr>
 </table>
 
+### Career Hub
+
+Career Hub is a second Django app inside the project, built for first-job search organization:
+
+- target company records
+- job application tracking
+- status-based pipeline dashboard
+- follow-up dates and next-step reminders
+- owner-only access and tests for data isolation
+
 ## Screenshots
 
 > Replace these placeholders with real screenshots after pushing the project.
@@ -134,7 +145,7 @@ Example section after recording a demo:
 
 | Layer | Tools |
 | --- | --- |
-| Backend | Python, Django 4.2 |
+| Backend | Python, Django 5.2 |
 | Database | SQLite for local development |
 | Frontend | HTML, Bootstrap 5, custom CSS |
 | Charts | Chart.js |
@@ -232,6 +243,12 @@ username: demo
 password: DemoPass123!
 ```
 
+You can also load demo job-search data for the Career Hub:
+
+```bash
+python manage.py seed_career_data
+```
+
 ## Routes
 
 | Route | Purpose |
@@ -240,6 +257,10 @@ password: DemoPass123!
 | `/signup/` | Create an account |
 | `/login/` | Sign in |
 | `/dashboard/` | Main dashboard |
+| `/career/` | Career Hub dashboard |
+| `/career/applications/` | Job application pipeline |
+| `/career/applications/create/` | Track a new job application |
+| `/career/companies/create/` | Add a target company |
 | `/transactions/` | Full transaction history with filters |
 | `/transactions/export/` | Export filtered transaction history as CSV |
 | `/portfolios/` | Portfolio list |
@@ -308,11 +329,46 @@ A trading or cash-flow event.
 **Computed value**
 - `total_amount`
 
+### Company
+A user-owned target employer for the job search tracker.
+
+**Fields**
+- `owner`
+- `name`
+- `website`
+- `location`
+- `notes`
+- `created_at`
+
+### JobApplication
+A tracked role inside the Career Hub pipeline.
+
+**Fields**
+- `owner`
+- `company`
+- `role`
+- `status`
+- `source`
+- `job_url`
+- `location`
+- `salary_range`
+- `contact_name`
+- `contact_email`
+- `next_step`
+- `applied_at`
+- `follow_up_on`
+- `notes`
+
+**Computed values**
+- `days_since_applied`
+- `needs_follow_up`
+
 ## Project Structure
 
 ```text
 polito/
 ├── config/                  # Project settings and root URLs
+├── career/                  # Career Hub app for job applications
 ├── portfolio/               # Core app: models, views, forms, tests, admin
 ├── portfolio/migrations/    # Database migrations
 ├── static/                  # CSS and local vendor assets
@@ -340,6 +396,7 @@ Current automated tests cover:
 - transaction filtering and CSV exports
 - portfolio-level holdings exports
 - dashboard insights for goal progress and key holdings
+- Career Hub pipeline dashboards, forms, filters, ownership checks, and seed data
 
 ## GitHub Presentation Tips
 
@@ -357,6 +414,7 @@ To make this repository look even better on GitHub, add:
 - real market price integration
 - PostgreSQL production setup
 - Celery jobs for background updates
+- interview preparation checklist and resume-version tracking
 
 ## License
 
